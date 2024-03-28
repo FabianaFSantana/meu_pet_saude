@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class ViaCepEndereco {
+
+    @JsonProperty("cep")
+    private String cep;
+
     @JsonProperty("logradouro")
     private String logradouro;
 
