@@ -33,6 +33,9 @@ public class Tutor {
     @Column(nullable = false)
     private String telefone;
 
+    @Column(nullable = false)
+    private String email;
+
     @Embedded
     private Endereco endereco;
 
