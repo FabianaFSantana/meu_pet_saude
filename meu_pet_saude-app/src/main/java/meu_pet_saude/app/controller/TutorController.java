@@ -67,6 +67,7 @@ public class TutorController {
             tutorEncont.setNome(tutor.getNome());
             tutorEncont.setDataDeNascimento(tutor.getDataDeNascimento());
             tutorEncont.setTelefone(tutor.getTelefone());
+            tutorEncont.setEmail(tutor.getEmail());
             tutorEncont.getEndereco().setCep(tutor.getEndereco().getCep());
             tutorEncont.getEndereco().setEndereco(tutor.getEndereco().getEndereco());
             tutorEncont.getEndereco().setNumero(tutor.getEndereco().getNumero());
