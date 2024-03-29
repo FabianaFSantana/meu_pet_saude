@@ -33,7 +33,7 @@ public class Tutor {
     @Column(nullable = false)
     private String telefone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Embedded
