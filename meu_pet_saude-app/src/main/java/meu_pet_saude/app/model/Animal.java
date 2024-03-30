@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import meu_pet_saude.app.constant.Especie;
+import meu_pet_saude.app.constant.Genero;
 
 @Data
 @NoArgsConstructor
@@ -35,6 +36,10 @@ public class Animal {
 
     @Column(nullable = false)
     private String raca;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Genero genero;
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     @Column(nullable = false)

@@ -54,6 +54,7 @@ public class AnimalController {
             animalEncont.setNome(animal.getNome());
             animalEncont.setEspecie(animal.getEspecie());
             animalEncont.setRaca(animal.getRaca());
+            animalEncont.setGenero(animal.getGenero());
             animalEncont.setDataDeNascimento(animal.getDataDeNascimento());
             animalEncont.setPeso(animal.getPeso());
             animalEncont.setCorDoPelo(animal.getCorDoPelo());
