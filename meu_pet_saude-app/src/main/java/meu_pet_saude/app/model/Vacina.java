@@ -28,12 +28,6 @@ public class Vacina {
     private String nomeVacina;
 
     @Column(nullable = false)
-    private String descricaoDoencas;
-
-    @Column(nullable = false)
-    private int idadeMinima;
-
-    @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataDaUltimaDose;
 
