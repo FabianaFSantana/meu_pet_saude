@@ -24,7 +24,7 @@ import meu_pet_saude.app.constant.Especie;
 public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String idAnimal;
+    private Long idAnimal;
 
     @Column(nullable = false)
     private String nome;
