@@ -27,6 +27,12 @@ public class CarrapatoPulga {
     private String nomeMedic;
 
     @Column(nullable = false)
+    private double peso;
+
+    @Column(nullable = false)
+    private double dosagem;
+
+    @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data;
 
