@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +62,17 @@ public class VacinaService {
             
         }
         throw new EntityNotFoundException("Animal não encontrado.");
+    }
+
+    public List<Vacina> exibirListaDeVacinas(Long idAnimal) {
+        Optional<Animal> animOptional = animalRepository.findById(idAnimal);
+        if (animOptional.isPresent()) {
+            Animal animalEncont = animOptional.get();
+
+            return animalEncont.getVacinas();
+            
+        }
+        return Collections.emptyList();
     }
     
 }
