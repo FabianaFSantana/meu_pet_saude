@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Endereco;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.repository.TutorRepository;
@@ -66,6 +67,13 @@ public class TutorController {
     public ResponseEntity<Optional<Tutor>> buscarTutorPeloId(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
         .body(tutorRepository.findById(id));
+    }
+
+    @GetMapping("/exibirListaDeAnimaisTutor/{idTutor}")
+    public ResponseEntity<List<Animal>> exibirListaAnimais(@PathVariable("idTutor") Long idTutor) {
+        List<Animal> animais = animalService.exibirListaDeAnimaisDoTutor(idTutor);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(animais);
     }
 
     @PutMapping("/{id}")

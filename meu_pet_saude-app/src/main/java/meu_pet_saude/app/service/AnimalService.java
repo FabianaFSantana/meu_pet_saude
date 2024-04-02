@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +63,18 @@ public class AnimalService {
             
         } else {
             throw new EntityNotFoundException("Tutor não encontrado.");
+        }
+    }
+
+    public List<Animal> exibirListaDeAnimaisDoTutor(Long idTutor) {
+        Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
+
+        if (tutorOptional.isPresent()) {
+            Tutor tutor = tutorOptional.get();
+            return tutor.getAnimais();
+            
+        } else {
+            return Collections.emptyList();
         }
     }
 }
