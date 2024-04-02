@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import meu_pet_saude.app.model.Endereco;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.repository.TutorRepository;
+import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.ViaCepEnderecoService;
 
 @RestController
@@ -29,6 +30,9 @@ public class TutorController {
 
     @Autowired
     private ViaCepEnderecoService viaCepEnderecoService;
+
+    @Autowired
+    private AnimalService animalService;
 
     @PostMapping
     public ResponseEntity<Tutor> cadastrarTutor(@RequestBody Tutor tutor){
@@ -42,6 +46,14 @@ public class TutorController {
         return ResponseEntity.status(HttpStatus.OK)
         .body("Endereço cadastrado!");
        
+    }
+
+    @PostMapping("/{idTutor}/adicionarAnimalNaLista/{idAnimal}")
+    public ResponseEntity<String> adicionarAnimal(@PathVariable("idTutor") Long idTutor,
+    @PathVariable("idAnimal") Long idAnimal) {
+        animalService.adicionarAnimalNaListaDeAnimaisDeTutor(idTutor, idAnimal);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Animal adiconado à lista do tutor.");
     }
 
     @GetMapping
@@ -89,4 +101,13 @@ public class TutorController {
         return ResponseEntity.status(HttpStatus.OK)
         .body("Tutor exluído com sucesso!");
     }
+
+    @DeleteMapping("/{idTutor}/removerAnimalDaLista/{idAnimal}")
+    public ResponseEntity<String> removerAnimalDaLista(@PathVariable("idTutor") Long idTutor,
+    @PathVariable("idAnimal") Long idAnimal) {
+        animalService.removerAnimalDaLista(idTutor, idAnimal);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Animal removido com sucesso da lista.");
+    }
+
 }
