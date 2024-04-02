@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Endereco;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.repository.TutorRepository;
+import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.ViaCepEnderecoService;
 
 @RestController
@@ -29,6 +31,9 @@ public class TutorController {
 
     @Autowired
     private ViaCepEnderecoService viaCepEnderecoService;
+
+    @Autowired
+    private AnimalService animalService;
 
     @PostMapping
     public ResponseEntity<Tutor> cadastrarTutor(@RequestBody Tutor tutor){
@@ -44,6 +49,14 @@ public class TutorController {
        
     }
 
+    @PostMapping("/{idTutor}/adicionarAnimalNaLista/{idAnimal}")
+    public ResponseEntity<String> adicionarAnimal(@PathVariable("idTutor") Long idTutor,
+    @PathVariable("idAnimal") Long idAnimal) {
+        animalService.adicionarAnimalNaListaDeAnimaisDeTutor(idTutor, idAnimal);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Animal adiconado à lista do tutor.");
+    }
+
     @GetMapping
     public ResponseEntity<List<Tutor>> exibirTutores() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -54,6 +67,13 @@ public class TutorController {
     public ResponseEntity<Optional<Tutor>> buscarTutorPeloId(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK)
         .body(tutorRepository.findById(id));
+    }
+
+    @GetMapping("/exibirListaDeAnimaisTutor/{idTutor}")
+    public ResponseEntity<List<Animal>> exibirListaAnimais(@PathVariable("idTutor") Long idTutor) {
+        List<Animal> animais = animalService.exibirListaDeAnimaisDoTutor(idTutor);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(animais);
     }
 
     @PutMapping("/{id}")
@@ -89,4 +109,13 @@ public class TutorController {
         return ResponseEntity.status(HttpStatus.OK)
         .body("Tutor exluído com sucesso!");
     }
+
+    @DeleteMapping("/{idTutor}/removerAnimalDaLista/{idAnimal}")
+    public ResponseEntity<String> removerAnimalDaLista(@PathVariable("idTutor") Long idTutor,
+    @PathVariable("idAnimal") Long idAnimal) {
+        animalService.removerAnimalDaLista(idTutor, idAnimal);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Animal removido com sucesso da lista.");
+    }
+
 }
