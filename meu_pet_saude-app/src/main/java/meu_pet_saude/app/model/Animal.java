@@ -1,6 +1,7 @@
 package meu_pet_saude.app.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -11,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,4 +52,8 @@ public class Animal {
 
     @Column(nullable = false)
     private String corDoPelo;
+
+    @OneToMany
+    private List<Vacina> vacinas;
+
 }
