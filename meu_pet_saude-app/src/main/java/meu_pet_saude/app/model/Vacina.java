@@ -24,7 +24,7 @@ public class Vacina {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idVacina;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nomeVacina;
 
     @Column(nullable = false)

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.repository.AnimalRepository;
+import meu_pet_saude.app.service.VacinaService;
 
 @RestController
 @RequestMapping("/animal")
@@ -25,10 +26,21 @@ public class AnimalController {
     @Autowired
     private AnimalRepository animalRepository;
 
+    @Autowired
+    private VacinaService vacinaService;
+
     @PostMapping
     public ResponseEntity<Animal> cadastrarAnimal(@RequestBody Animal animal) {
         return ResponseEntity.status(HttpStatus.CREATED)
         .body(animalRepository.save(animal));
+    }
+
+    @PostMapping("/{idAnimal}/adicionarVacinaListaAnimal/{idVacina}")
+    public ResponseEntity<String> adicionarVacinaLista(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idVacina") Long idVacina) {
+        vacinaService.adicionarVacinaListaDeVacinasAnimal(idAnimal, idVacina);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Vacina adicionada à lista de vacinas do Animal");
     }
 
     @GetMapping
@@ -73,6 +85,14 @@ public class AnimalController {
         animalRepository.deleteById(idAnimal);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Cadastro do animal excluído com sucesso!");
+    }
+
+    @DeleteMapping("/{idAnimal}/removerVacinaDaLista/{idVacina}")
+    public ResponseEntity<String> removerVacinaDaLista(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idVacina") Long idVacina) {
+        vacinaService.removerVacinaDaLista(idAnimal, idVacina);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Vacina removida da lista de vacinas.");
     }
 
 
