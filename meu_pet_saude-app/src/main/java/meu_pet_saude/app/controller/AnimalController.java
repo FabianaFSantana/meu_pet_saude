@@ -19,6 +19,7 @@ import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.service.VacinaService;
+import meu_pet_saude.app.service.VermifugacaoService;
 
 @RestController
 @RequestMapping("/animal")
@@ -29,6 +30,9 @@ public class AnimalController {
 
     @Autowired
     private VacinaService vacinaService;
+
+    @Autowired
+    private VermifugacaoService vermifugacaoService;
 
     @PostMapping
     public ResponseEntity<Animal> cadastrarAnimal(@RequestBody Animal animal) {
@@ -42,6 +46,14 @@ public class AnimalController {
         vacinaService.adicionarVacinaListaDeVacinasAnimal(idAnimal, idVacina);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Vacina adicionada à lista de vacinas do Animal");
+    }
+
+    @PostMapping("/{idAnimal}/adicionarVermifugoListaAnimal/{idVerm}")
+    public ResponseEntity<String> adicionarVermigudoLista(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idVerm") Long idVerm) {
+        vermifugacaoService.adicionarVermifugacao(idAnimal, idVerm);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Vermifugo adicionado à lista do animal.");
     }
 
     @GetMapping
