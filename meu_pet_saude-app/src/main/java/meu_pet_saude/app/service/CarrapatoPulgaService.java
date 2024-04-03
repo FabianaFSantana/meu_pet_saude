@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,17 @@ public class CarrapatoPulgaService {
             }
         } else {
             throw new EntityNotFoundException("Animal não econtrado");
+        }
+    }
+
+    public List<CarrapatoPulga> exibirListaCarrapaticidasDoAnimal(Long idAnimal) { 
+        Optional<Animal> animOptional = animalRepository.findById(idAnimal);
+
+        if (animOptional.isPresent()) {
+            Animal animalEncont = animOptional.get();
+            return animalEncont.getCarrapaticidas();  
+        } else {
+            return Collections.emptyList();
         }
     }
     

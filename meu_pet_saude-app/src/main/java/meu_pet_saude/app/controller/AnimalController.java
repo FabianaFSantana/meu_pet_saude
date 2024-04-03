@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Animal;
+import meu_pet_saude.app.model.CarrapatoPulga;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
@@ -91,6 +92,12 @@ public class AnimalController {
     public ResponseEntity<List<Vermifugacao>> exibirListaDeVermifugos(@PathVariable("idAnimal") Long idAnimal) {
         List<Vermifugacao> vermifugos = vermifugacaoService.exibirListaDeVermifugosDoAnimal(idAnimal);
         return ResponseEntity.status(HttpStatus.OK).body(vermifugos);
+    }
+
+    @GetMapping("/exibirListaDeCarrapaticidas/{idAnimal}")
+    public ResponseEntity<List<CarrapatoPulga>> exibirListaDeCarrapaticidas(@PathVariable("idAnimal") Long idAnimal){
+        List<CarrapatoPulga> carrapaticidas = carrapatoPulgaService.exibirListaCarrapaticidasDoAnimal(idAnimal);
+        return ResponseEntity.status(HttpStatus.OK).body(carrapaticidas);
     }
 
     @PutMapping("/{idAnimal}")
