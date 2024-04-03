@@ -39,4 +39,5 @@ public class CarrapatoPulga {
     @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate proximaDose;
+    
 }

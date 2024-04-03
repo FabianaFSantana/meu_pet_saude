@@ -59,4 +59,7 @@ public class Animal {
     @OneToMany
     private List<Vermifugacao> vermifugos;
 
+    @OneToMany
+    private List<CarrapatoPulga> carrapaticidas;
+
 }
