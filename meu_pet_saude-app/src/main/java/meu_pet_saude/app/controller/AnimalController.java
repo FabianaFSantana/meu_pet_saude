@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Vacina;
+import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.service.VacinaService;
+import meu_pet_saude.app.service.VermifugacaoService;
 
 @RestController
 @RequestMapping("/animal")
@@ -29,6 +31,9 @@ public class AnimalController {
 
     @Autowired
     private VacinaService vacinaService;
+
+    @Autowired
+    private VermifugacaoService vermifugacaoService;
 
     @PostMapping
     public ResponseEntity<Animal> cadastrarAnimal(@RequestBody Animal animal) {
@@ -42,6 +47,14 @@ public class AnimalController {
         vacinaService.adicionarVacinaListaDeVacinasAnimal(idAnimal, idVacina);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Vacina adicionada à lista de vacinas do Animal");
+    }
+
+    @PostMapping("/{idAnimal}/adicionarVermifugoListaAnimal/{idVerm}")
+    public ResponseEntity<String> adicionarVermigudoLista(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idVerm") Long idVerm) {
+        vermifugacaoService.adicionarVermifugacao(idAnimal, idVerm);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Vermifugo adicionado à lista do animal.");
     }
 
     @GetMapping
@@ -60,6 +73,12 @@ public class AnimalController {
     public ResponseEntity<List<Vacina>> exibirListaDeVacinas(@PathVariable("idAnimal") Long idAnimal) {
         List<Vacina> vacinas = vacinaService.exibirListaDeVacinas(idAnimal);
         return ResponseEntity.status(HttpStatus.OK).body(vacinas);
+    }
+
+    @GetMapping("/exibirListaDeVermifugos/{idAnimal}")
+    public ResponseEntity<List<Vermifugacao>> exibirListaDeVermifugos(@PathVariable("idAnimal") Long idAnimal) {
+        List<Vermifugacao> vermifugos = vermifugacaoService.exibirListaDeVermifugosDoAnimal(idAnimal);
+        return ResponseEntity.status(HttpStatus.OK).body(vermifugos);
     }
 
     @PutMapping("/{idAnimal}")
@@ -100,6 +119,14 @@ public class AnimalController {
         vacinaService.removerVacinaDaLista(idAnimal, idVacina);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Vacina removida da lista de vacinas.");
+    }
+
+    @DeleteMapping("/{idAnimal}/removerVermifugoDaLista/{idVerm}")
+    public ResponseEntity<String> removerVermifugoDaLista(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idVerm") Long idVerm) {
+        vermifugacaoService.removerVermifugoDaLista(idAnimal, idVerm);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Vermífugo removido com sucesso.");
     }
 
 

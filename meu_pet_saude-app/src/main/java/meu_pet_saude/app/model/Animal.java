@@ -56,4 +56,7 @@ public class Animal {
     @OneToMany
     private List<Vacina> vacinas;
 
+    @OneToMany
+    private List<Vermifugacao> vermifugos;
+
 }
