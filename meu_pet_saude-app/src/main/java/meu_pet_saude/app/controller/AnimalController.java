@@ -148,6 +148,14 @@ public class AnimalController {
         .body("Vermífugo removido com sucesso.");
     }
 
+    @DeleteMapping("/{idAnimal}/removerCarrapDaLista/{idCarrap}")
+    public ResponseEntity<String> removerCarrapDaLita(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idCarrap") Long idCarrap) {
+        carrapatoPulgaService.removerCarrapaticidaDaLista(idAnimal, idCarrap);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Carrapaticida removido com sucesso da lista.");
+    }
+
 
     
 }
