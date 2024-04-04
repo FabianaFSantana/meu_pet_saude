@@ -54,4 +54,27 @@ public class ConsultaService {
             return Collections.emptyList();
         }
     }
+
+    public void removerConsultaDaLista(Long idAnimal, Long idConsulta) {
+        Optional<Animal> animOptional = animalRepository.findById(idAnimal);
+
+        if (animOptional.isPresent()) {
+            Animal animalEcont = animOptional.get();
+
+            Optional<Consulta> consOptional = consultaRepository.findById(idConsulta);
+            if (consOptional.isPresent()) {
+                Consulta consEncont = consOptional.get();
+
+                List<Consulta> consultas = animalEcont.getConsultas();
+                consultas.remove(consEncont);
+                animalRepository.save(animalEcont);
+                
+            } else {
+                throw new EntityNotFoundException("Consulta não encontrada.");
+            }
+ 
+        } else {
+            throw new EntityNotFoundException("Animal não encontrado.");
+        }
+    }
 }
