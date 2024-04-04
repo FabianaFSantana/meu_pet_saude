@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.CarrapatoPulga;
+import meu_pet_saude.app.model.Consulta;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.service.CarrapatoPulgaService;
+import meu_pet_saude.app.service.ConsultaService;
 import meu_pet_saude.app.service.VacinaService;
 import meu_pet_saude.app.service.VermifugacaoService;
 
@@ -39,6 +41,9 @@ public class AnimalController {
 
     @Autowired
     private CarrapatoPulgaService carrapatoPulgaService;
+
+    @Autowired
+    private ConsultaService consultaService;
 
     @PostMapping
     public ResponseEntity<Animal> cadastrarAnimal(@RequestBody Animal animal) {
@@ -70,6 +75,14 @@ public class AnimalController {
         .body("Carrapaticida adicionado à Lista.");
     }
 
+    @PostMapping("/{idAnimal}/adicionarConsultaListaAnimal/{idConsulta}")
+    public ResponseEntity<String> adicionarConsultaNaLista(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idConsulta") Long idConsulta) {
+        consultaService.adicionarConsultaNaLista(idAnimal, idConsulta);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Consulta adicionada à lista.");
+    }
+
     @GetMapping
     public ResponseEntity<List<Animal>> exibirListaDeAnimais() {
         return ResponseEntity.status(HttpStatus.OK)
@@ -98,6 +111,12 @@ public class AnimalController {
     public ResponseEntity<List<CarrapatoPulga>> exibirListaDeCarrapaticidas(@PathVariable("idAnimal") Long idAnimal){
         List<CarrapatoPulga> carrapaticidas = carrapatoPulgaService.exibirListaCarrapaticidasDoAnimal(idAnimal);
         return ResponseEntity.status(HttpStatus.OK).body(carrapaticidas);
+    }
+
+    @GetMapping("/exibirListaDeConsultas/{idAnimal}")
+    public ResponseEntity<List<Consulta>> exibirListaConsultas(@PathVariable("idAnimal") Long idAnimal){
+        List<Consulta> consultas = consultaService.exibirConsultas(idAnimal);
+        return ResponseEntity.status(HttpStatus.OK).body(consultas);
     }
 
     @PutMapping("/{idAnimal}")
@@ -154,6 +173,14 @@ public class AnimalController {
         carrapatoPulgaService.removerCarrapaticidaDaLista(idAnimal, idCarrap);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Carrapaticida removido com sucesso da lista.");
+    }
+
+    @DeleteMapping("/{idAnimal}/removerConsultaListaAnimal/{idConsulta}")
+    public ResponseEntity<String> removerConsultaLista(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idConsulta") Long idConsulta) {
+        consultaService.removerConsultaDaLista(idAnimal, idConsulta);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Consulta removida da lista do animal.");
     }
 
 

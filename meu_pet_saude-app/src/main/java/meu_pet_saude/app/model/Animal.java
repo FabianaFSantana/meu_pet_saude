@@ -62,4 +62,7 @@ public class Animal {
     @OneToMany
     private List<CarrapatoPulga> carrapaticidas;
 
+    @OneToMany
+    private List<Consulta> consultas;
+
 }
