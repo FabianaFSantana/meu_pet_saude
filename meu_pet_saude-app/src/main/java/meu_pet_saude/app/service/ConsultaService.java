@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,18 @@ public class ConsultaService {
             }
         } else {
             throw new EntityNotFoundException("Animal não encontrado.");
+        }
+    }
+
+    public List<Consulta> exibirConsultas(Long idAnimal) {
+        Optional<Animal> animOptional = animalRepository.findById(idAnimal);
+
+        if (animOptional.isPresent()) {
+            Animal animal = animOptional.get();
+            return animal.getConsultas();
+            
+        } else {
+            return Collections.emptyList();
         }
     }
 }
