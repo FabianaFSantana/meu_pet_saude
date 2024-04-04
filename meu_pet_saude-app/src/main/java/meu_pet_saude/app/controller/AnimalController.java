@@ -21,6 +21,7 @@ import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.service.CarrapatoPulgaService;
+import meu_pet_saude.app.service.ConsultaService;
 import meu_pet_saude.app.service.VacinaService;
 import meu_pet_saude.app.service.VermifugacaoService;
 
@@ -39,6 +40,9 @@ public class AnimalController {
 
     @Autowired
     private CarrapatoPulgaService carrapatoPulgaService;
+
+    @Autowired
+    private ConsultaService consultaService;
 
     @PostMapping
     public ResponseEntity<Animal> cadastrarAnimal(@RequestBody Animal animal) {
@@ -68,6 +72,14 @@ public class AnimalController {
         carrapatoPulgaService.adicionarCarrapaticidaNaLista(idAnimal, idCarrap);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Carrapaticida adicionado à Lista.");
+    }
+
+    @PostMapping("/{idAnimal}/adicionarConsultaListaAnimal/{idConsulta}")
+    public ResponseEntity<String> adicionarConsultaNaLista(@PathVariable("idAnimal") Long idAnimal,
+    @PathVariable("idConsulta") Long idConsulta) {
+        consultaService.adicionarConsultaNaLista(idAnimal, idConsulta);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Consulta adicionada à lista.");
     }
 
     @GetMapping
