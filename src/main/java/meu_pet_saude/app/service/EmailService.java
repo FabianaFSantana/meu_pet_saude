@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.model.Vacina;
-import meu_pet_saude.app.repository.VacinaRepository;
+
 
 @Service
 public class EmailService {
@@ -17,8 +17,6 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @Autowired
-    private VacinaRepository vacinaRepository;
 
     @Value("${spring.mail.host}")
     private String host;
