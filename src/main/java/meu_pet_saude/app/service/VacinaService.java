@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -73,6 +74,13 @@ public class VacinaService {
             
         }
         return Collections.emptyList();
+    }
+
+    public List<Vacina> exibirListaDeVacinasPorDataProximaDose(LocalDate dataDaProximaDose) {
+
+        List<Vacina> vacinas = vacinaRepository.findAllByDataProximaDosagem(dataDaProximaDose);
+        
+        return vacinas;
     }
     
 }
