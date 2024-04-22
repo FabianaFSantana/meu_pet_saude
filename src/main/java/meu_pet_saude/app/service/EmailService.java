@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import meu_pet_saude.app.model.Animal;
+import meu_pet_saude.app.model.CarrapatoPulga;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
@@ -82,13 +83,34 @@ public class EmailService {
             
             try {
                 enviarEmail(destinatario, assunto, mensagem);
-                
+
             } catch (Exception e) {
                e.printStackTrace();
             }
 
         } catch (Exception e) {
             throw new RuntimeException("Erro ao enviar email.");
+        }
+    }
+
+    public void enviarEmailDeRefocoDeCarrapaticida(Tutor tutor, CarrapatoPulga carrapaticida, Animal animal) {
+        
+        try {
+            String destinatario = tutor.getEmail();
+            String assunto = carrapaticida.getNomeMedic();
+            String mensagem = "Olá " + tutor.getNome() + "!\n\n" +
+                           "Hoje é o dia da dose de reforço do carrapaticida de " + animal.getNome() + "!\n" +
+                           "Medicamento: " + carrapaticida.getNomeMedic() +"\n" +
+                           "Data da última dose: " + carrapaticida.getData() + "\n" +
+                           "Data da prósima dose: " + carrapaticida.getProximaDose() + "\n";
+            
+            try {
+                enviarEmail(destinatario, assunto, mensagem);
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Email não pôde ser enviado.");
         }
     }
 
