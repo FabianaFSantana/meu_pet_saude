@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.CarrapatoPulga;
 import meu_pet_saude.app.repository.CarrapatoPulgaRepository;
+import meu_pet_saude.app.service.CarrapatoPulgaService;
 
 @RestController
 @RequestMapping("/carrapatoPulga")
@@ -26,11 +27,23 @@ public class CarrapatoPulgaController {
     @Autowired
     private CarrapatoPulgaRepository carrapatoPulgaRepository;
 
+    @Autowired
+    private CarrapatoPulgaService carrapatoPulgaService;
+
 
     @PostMapping
     public ResponseEntity<CarrapatoPulga> cadastrarDosagem(@RequestBody CarrapatoPulga carrapatoPulga) {
         return ResponseEntity.status(HttpStatus.CREATED)
         .body(carrapatoPulgaRepository.save(carrapatoPulga));
+    }
+
+    @PostMapping("/{idTutor}/enviarLembreteDeCarrapaticidaPorEmail/{proximaDose}")
+    public ResponseEntity<String> enviarLembreteCarrapaticidaEmail(@PathVariable("idTutor") Long idTutor,
+    @PathVariable("proximaDose") LocalDate proximaDose) {
+
+        carrapatoPulgaService.exibirListaDeCarrapaticidasProximaDose(idTutor, proximaDose);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Lembrete de carrapaticida enviado com sucesso.");
     }
 
     @GetMapping
