@@ -1,5 +1,6 @@
 package meu_pet_saude.app.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.VermifugacaoRepository;
+import meu_pet_saude.app.service.VermifugacaoService;
 
 @RestController
 @RequestMapping("/vermifugacao")
@@ -25,10 +27,22 @@ public class VermifugacaoController {
     @Autowired
     private VermifugacaoRepository vermifugacaoRepository;
 
+    @Autowired 
+    private VermifugacaoService vermifugacaoService;
+
     @PostMapping
     public ResponseEntity<Vermifugacao> cadastrarVermifugacao(@RequestBody Vermifugacao vermifugacao) {
         return ResponseEntity.status(HttpStatus.CREATED)
         .body(vermifugacaoRepository.save(vermifugacao));
+    }
+
+    @PostMapping("/{idTutor}/enviarLembreteDeVermifugacaoPorEmail/{proximaDose}")
+    public ResponseEntity<String> enviarLembreteVermifPorEmail(@PathVariable("idTutor") Long idTutor,
+    @PathVariable("proximaDose") LocalDate proximaDose) {
+        
+        vermifugacaoService.exibirListaDeVermifugosNaDataAtual(idTutor, proximaDose);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body("Lembrete de vermífugo enviado com sucesso!");
     }
 
     @GetMapping
