@@ -25,7 +25,7 @@ public class EmailService {
     private int porta;
 
     @Value("${spring.mail.username}")
-    private String tutor;
+    private String destinatario;
 
     @Value("${spring.mail.password}")
     private String senha;
@@ -48,7 +48,7 @@ public class EmailService {
             String destinatario = tutor.getEmail();
             String assunto = "Nova Notificação: " + vacina.getNomeVacina();
             String mensagem = "Olá, " + tutor.getNome() + "!\n\n" +
-                              "Hoje é dia da dose de reforço de " + animal.getNome() + "!\n" + 
+                              "Hoje é o dia da vacina de " + animal.getNome() +"!\n" +
                               "Nome da vacina: " + vacina.getNomeVacina() + "\n" +
                               "Data da última dose: " + vacina.getDataDaUltimaDose() + "\n" +
                               "Data da próxima dose: " + vacina.getDataDaProximaDose() + "\n";

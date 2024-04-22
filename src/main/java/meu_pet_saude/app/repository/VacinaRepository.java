@@ -1,7 +1,7 @@
 package meu_pet_saude.app.repository;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,5 +14,5 @@ import meu_pet_saude.app.model.Vacina;
 public interface VacinaRepository extends JpaRepository<Vacina, Long> {
     
     @Query("SELECT v FROM vacina v WHERE v.dataDaProximaDose = :dataDaProximaDose")
-    List<Vacina> findAllByDataProximaDosagem(@Param("dataDaProximaDose") LocalDate dataDaProximaDose);
+    Optional<Vacina> findByDataProximaDose(@Param("dataDaProximaDose") LocalDate dataDaProximaDose);
 }

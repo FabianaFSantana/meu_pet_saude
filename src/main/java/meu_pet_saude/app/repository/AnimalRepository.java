@@ -7,5 +7,5 @@ import meu_pet_saude.app.model.Animal;
 
 @Repository
 public interface AnimalRepository extends JpaRepository<Animal, Long>{
-    
+
 }
