@@ -1,10 +1,10 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import javax.swing.text.html.Option;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.CarrapatoPulga;
+import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.CarrapatoPulgaRepository;
+import meu_pet_saude.app.repository.TutorRepository;
 
 @Service
 public class CarrapatoPulgaService {
@@ -23,6 +25,12 @@ public class CarrapatoPulgaService {
 
     @Autowired 
     private CarrapatoPulgaRepository carrapatoPulgaRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private TutorRepository tutorRepository;
 
     public void adicionarCarrapaticidaNaLista(Long idAnimal, Long idCarrap) {
 
@@ -78,6 +86,33 @@ public class CarrapatoPulgaService {
         } else {
             throw new EntityNotFoundException("Animal não econtrado.");
         }
+    }
+
+    public List<CarrapatoPulga> exibirListaDeCarrapaticidasProximaDose(Long idTutor, LocalDate proximaDose) {
+        
+        Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
+        List<CarrapatoPulga> carrapaticidasHoje = new ArrayList<>();
+
+        if (tutorOptional.isPresent()) {
+            Tutor tutorEncont = tutorOptional.get();
+            List<Animal> animais = tutorEncont.getAnimais();
+
+            for (Animal animal : animais) {
+                if (!animal.getCarrapaticidas().isEmpty()) {
+                    List<CarrapatoPulga> carrapaticidas = animal.getCarrapaticidas();
+
+                    for (CarrapatoPulga carrapaticida : carrapaticidas){
+                        if (carrapaticida.getProximaDose().equals(proximaDose)) {
+                            carrapaticidasHoje.add(carrapaticida);
+                        }
+                    }
+                    for (CarrapatoPulga carrapaticida : carrapaticidasHoje) {
+                        emailService.enviarEmailDeRefocoDeCarrapaticida(tutorEncont, carrapaticida, animal);
+                    }
+                } 
+            }
+        }
+        return carrapaticidasHoje;
     }
     
 }
