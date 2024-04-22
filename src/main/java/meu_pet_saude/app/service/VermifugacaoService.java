@@ -1,5 +1,7 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
 import meu_pet_saude.app.model.Animal;
+import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
+import meu_pet_saude.app.repository.TutorRepository;
 import meu_pet_saude.app.repository.VermifugacaoRepository;
 
 @Service
@@ -21,6 +25,12 @@ public class VermifugacaoService {
 
     @Autowired
     private VermifugacaoRepository vermifugacaoRepository;
+
+    @Autowired
+    private TutorRepository tutorRepository;
+
+    @Autowired
+    private EmailService emailService;
     
     public void adicionarVermifugacao(Long idAnimal, Long idVerm) {
         
@@ -79,5 +89,33 @@ public class VermifugacaoService {
         } else {
             throw new EntityNotFoundException("Animal não foi encontrado.");
         }
+    }
+
+    public List<Vermifugacao> exibirListaDeVermifugosNaDataAtual(Long idTutor, LocalDate proximaDose) {
+
+        Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
+        List<Vermifugacao> vermifugosHoje = new ArrayList<>();
+
+        if (tutorOptional.isPresent()) {
+            Tutor tutorEncont = tutorOptional.get();
+            List<Animal> animais = tutorEncont.getAnimais();
+
+            for (Animal animal : animais) {
+                if (!animal.getVermifugos().isEmpty()) {
+                    List<Vermifugacao> vermifugos = animal.getVermifugos();
+
+                    for (Vermifugacao vermifugo : vermifugos) {
+                        if (vermifugo.getProximaDose().isEqual(proximaDose)) {
+                            vermifugosHoje.add(vermifugo);
+                        }
+                    }
+
+                    for (Vermifugacao vermifugo : vermifugosHoje) {
+                        emailService.enviarEmailDeRefocoDeVermifugacao(tutorEncont, vermifugo, animal);
+                    }  
+                }
+            }
+        }
+        return vermifugosHoje;
     }
 }
