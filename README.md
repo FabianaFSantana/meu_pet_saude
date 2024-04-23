@@ -19,6 +19,10 @@ Certifique-se de ter as seguintes dependências instaladas em seu ambiente de de
 * [Maven](https://maven.apache.org/download.cgi)
 * [MySQL](https://dev.mysql.com/downloads/installer/)
 
+### Requisitos Adicionais
+Será necessário para o envio das notificações e para testá-las criar contas no:
+* [Mailtrap](https://mailtrap.io)
+
 ### Instalação
 1. Clone o repositório:
 ```
@@ -39,6 +43,13 @@ Se for o caso, edite o arquivo `src/main/resources/application.properties` e aju
 spring.datasource.url=jdbc:mysql://localhost:3306/meu_pet_saude
 spring.datasource.username=seu-usuario
 spring.datasource.password=sua-senha
+```
+Modifique, também, as configurações da conexão com o Mailtrap de acordo com as credenciais presentes na sua conta do Mailtrap:
+```
+spring.mail.port=PORT
+spring.mail.username=USERNAME
+spring.mail.password=PASSWORD
+spring.mail.properties.mail.smtp.auth=AUTH
 ```
 5. Execute a aplicação:
 ```
