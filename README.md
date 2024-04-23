@@ -63,7 +63,7 @@ O projeto é estruturado da seguinte forma:
 * `com.meu_pet_saude.api.controller`: Controladores para manipular as requisições HTTP.
 * `com.meu_pet_saude.api.model`: Modelos de dados para representar Tutor, ViaCepEndereco, Animal, Vacina, CarrapatoPulga (carrapaticidas), Vermifugacao e Consulta.
 * `com.meu_pet_saude.api.repository`: Repositórios para interação com o banco de dados.
-* `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
+* `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Email (para enviar lembretes para os tutores), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
 
 ## Uso da API
 A API possui os seguintes endpoints:
@@ -99,6 +99,7 @@ A API possui os seguintes endpoints:
 
 ### CarrapatoPulga:
 * `POST /carrapatoPulga`: Cria um novo carapaticida.
+* `POST /carraptoPulga/{idTutor}/enviarLembreteDeCarrapaticidaPorEmail/{proximaDose}`: Envia lembrete de dose de reforço para o tutor.
 * `GET /carrapatoPulga`: Lista todos os carrapaticidas.
 * `GET /carrapatoPulga/{idCarrap}`: Obtém informações de um carrapaticida específico.
 * `GET /carrapatoPulga/data/{data`: Busca um carrapaticida pela data da aplicação.
@@ -107,6 +108,7 @@ A API possui os seguintes endpoints:
 
 ### Vacina:
 * `POST /vacina`: Cadastra uma nova vacina.
+* `POST /vacina/{idTutor}/enviarLembretePorEmail/{dataDaProximaDose}`: Envia lembrete de dose de reforço para o tutor.
 * `GET /vacina`: Lista todos os carrapaticidas.
 * `GET /vacna/{idVacina}`: Obtém informações de uma vacina específica.
 * `PUT /vacina/{idVacina}`: Atualiza as informações de uma vacina.
@@ -114,6 +116,7 @@ A API possui os seguintes endpoints:
 
 ### Vermifugacao:
 * `POST /vermifugacao`: Cadastra um novo vermífugo.
+* `POST /vermifugacao/{idTutor}/enviarLembreteDeVermifugacaoPorEmail/{proximaDose}`: Envia lembrete de dose de reforço para o tutor.
 * `GET /vermifugacao`: Lista todos os vermífugos.
 * `GET /vermifugacao/{idVerm}`: Obtém informações de um vermífugo específico.
 * `PUT /vermifugacao/{idVerm}`: Atualiza as informações de um vermífugo.
