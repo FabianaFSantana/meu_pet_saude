@@ -86,7 +86,7 @@ public class VacinaService {
         return Collections.emptyList();
     }
 
-    public List<Vacina> exibirListaDeVacinasPorDataProximaDose(Long idTutor, LocalDate dataDaProximaDose) {
+    public List<Vacina> enviarLemreteDeDoseDeReforcoVacinaPorEmail(Long idTutor, LocalDate dataDaProximaDose) {
 
         Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
         List<Vacina> vacinasHoje = new ArrayList<>();
@@ -111,4 +111,6 @@ public class VacinaService {
         }
         return vacinasHoje;
     }
+
+
 }

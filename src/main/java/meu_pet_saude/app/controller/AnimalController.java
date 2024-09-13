@@ -91,8 +91,7 @@ public class AnimalController {
 
     @GetMapping("/{idAnimal}")
     public ResponseEntity<Optional<Animal>> buscarAnimalPeloId(@PathVariable("idAnimal") Long idAnimal) {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(animalRepository.findById(idAnimal));
+        return ResponseEntity.status(HttpStatus.OK).body(animalRepository.findById(idAnimal));
     }
 
     @GetMapping("/exibirListaDeVacinas/{idAnimal}")
