@@ -21,8 +21,10 @@ import meu_pet_saude.app.model.Consulta;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
+import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.CarrapatoPulgaService;
 import meu_pet_saude.app.service.ConsultaService;
+import meu_pet_saude.app.service.TutorService;
 import meu_pet_saude.app.service.VacinaService;
 import meu_pet_saude.app.service.VermifugacaoService;
 
@@ -30,25 +32,10 @@ import meu_pet_saude.app.service.VermifugacaoService;
 @RequestMapping("/animal")
 public class AnimalController {
 
-    @Autowired
-    private AnimalRepository animalRepository;
-
-    @Autowired
-    private VacinaService vacinaService;
-
-    @Autowired
-    private VermifugacaoService vermifugacaoService;
-
-    @Autowired
-    private CarrapatoPulgaService carrapatoPulgaService;
-
-    @Autowired
-    private ConsultaService consultaService;
-
-    @PostMapping
-    public ResponseEntity<Animal> cadastrarAnimal(@RequestBody Animal animal) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-        .body(animalRepository.save(animal));
+    @PostMapping("/{tutor_id}")
+    public ResponseEntity<Animal> cadastrarAnimal(@PathVariable("tutor_id") Long id, @RequestBody Animal animal) {
+        Animal novoAnimal = tutorService.adicionarAnimalNaListaDeTutor(id, animal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
     }
 
     @PostMapping("/{idAnimal}/adicionarVacinaListaAnimal/{idVacina}")
@@ -181,6 +168,24 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.OK)
         .body("Consulta removida da lista do animal.");
     }
+
+    @Autowired
+    private TutorService tutorService;
+
+    @Autowired
+    private AnimalRepository animalRepository;
+
+    @Autowired
+    private VacinaService vacinaService;
+
+    @Autowired
+    private VermifugacaoService vermifugacaoService;
+
+    @Autowired
+    private CarrapatoPulgaService carrapatoPulgaService;
+
+    @Autowired
+    private ConsultaService consultaService;
 
 
     

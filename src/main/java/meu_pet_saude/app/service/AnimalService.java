@@ -16,12 +16,6 @@ import meu_pet_saude.app.repository.TutorRepository;
 @Service
 public class AnimalService {
     
-    @Autowired
-    private AnimalRepository animalRepository;
-
-    @Autowired
-    private TutorRepository tutorRepository;
-
     public void adicionarAnimalNaListaDeAnimaisDeTutor(Long idTutor, Long idAnimal) {
         Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
         if (tutorOptional.isPresent()) {
@@ -77,5 +71,11 @@ public class AnimalService {
             return Collections.emptyList();
         }
     }
+
+    @Autowired
+    private AnimalRepository animalRepository;
+
+    @Autowired
+    private TutorRepository tutorRepository;
 
 }
