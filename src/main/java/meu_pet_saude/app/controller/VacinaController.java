@@ -39,7 +39,7 @@ public class VacinaController {
     @PostMapping("/{idTutor}/enviarLembretePorEmail/{dataDaProximaDose}") 
     public ResponseEntity<String> enviarEmail(@PathVariable("idTutor") Long idTutor, 
     @PathVariable("dataDaProximaDose") LocalDate dataDaProximaDose) {
-        vacinaService.exibirListaDeVacinasPorDataProximaDose(idTutor, dataDaProximaDose);
+        vacinaService.enviarLemreteDeDoseDeReforcoVacinaPorEmail(idTutor, dataDaProximaDose);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Lembrete de vacina enviado para o email.");
     }
