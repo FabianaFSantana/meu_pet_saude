@@ -17,23 +17,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Vacina;
-import meu_pet_saude.app.repository.VacinaRepository;
+import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.VacinaService;
 
 @RestController
 @RequestMapping("/vacina")
 public class VacinaController {
 
-    @Autowired
-    private VacinaRepository vacinaRepository;
 
-    @Autowired
-    private VacinaService vacinaService;
 
-    @PostMapping
-    public ResponseEntity<Vacina> cadastrarVacina(@RequestBody Vacina vacina) {
-        return ResponseEntity.status(HttpStatus.CREATED) 
-        .body(vacinaRepository.save(vacina));
+    @PostMapping("/{animal_id}")
+    public ResponseEntity<Vacina> cadastrarVacina(@PathVariable("animal_id") Long idAnimal, @RequestBody Vacina vacina) {
+
+        Vacina novaVacina = animalService.adicinarVacinaNaListaDoAnimal(idAnimal, vacina);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novaVacina);
     }
 
     @PostMapping("/{idTutor}/enviarLembretePorEmail/{dataDaProximaDose}") 
@@ -46,43 +43,29 @@ public class VacinaController {
 
     @GetMapping
     public ResponseEntity<List<Vacina>> exibirVacinas() {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(vacinaRepository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(vacinaService.exibirVacinasCadastradas());
     }
 
-    @GetMapping("/{idVacina}")
-    public ResponseEntity<Optional<Vacina>> exibirVacinaPeloId(@PathVariable("idVacina") Long idVacina) {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(vacinaRepository.findById(idVacina));
+    @GetMapping("/{vacina_id}")
+    public ResponseEntity<Vacina> exibirVacinaPeloId(@PathVariable("vacina_id") Long idVacina) {
+        return ResponseEntity.status(HttpStatus.OK).body(vacinaService.buscarVacinaPorId(idVacina));
     }
 
-    @PutMapping("/{idVacina}")
-    public ResponseEntity<Vacina> atualizarDadosVacina(@PathVariable("idVacina") Long idVacina,
-    @RequestBody Vacina vacina) {
-        Optional<Vacina> vacOptional = vacinaRepository.findById(idVacina);
+    @PutMapping("/{vacina_id}")
+    public ResponseEntity<Vacina> atualizarDadosVacina(@PathVariable("vacina_id") Long idVacina, @RequestBody Vacina vacina) {
 
-        if (vacOptional.isPresent()) {
-            Vacina vacEncontrada = vacOptional.get();
-
-            vacEncontrada.setNomeVacina(vacina.getNomeVacina());
-            vacEncontrada.setDataDaUltimaDose(vacina.getDataDaUltimaDose());
-            vacEncontrada.setDataDaProximaDose(vacina.getDataDaProximaDose());
-            vacEncontrada.setNomeDaClinica(vacina.getNomeDaClinica());
-            vacEncontrada.setNomeVeterinario(vacina.getNomeVeterinario());
-
-            return ResponseEntity.status(HttpStatus.OK)
-            .body(vacinaRepository.save(vacEncontrada));
-            
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(vacinaService.atualizarDadosVacina(idVacina, vacina));
     }
 
-    @DeleteMapping("/{idVacina}")
-    public ResponseEntity<String> excluirVacina(@PathVariable("idVacina") Long idVacina) {
-        vacinaRepository.deleteById(idVacina);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Vacina excluída do banco de dados.");
+    @DeleteMapping("/{animal_id}/excluirVacina/{vacina_id}")
+    public ResponseEntity<String> excluirVacina(@PathVariable("animal_id") Long idAnimal, @PathVariable("vacina_id") Long idVacina) {
+        return ResponseEntity.status(HttpStatus.OK).body(vacinaService.removerVacinaDaLista(idAnimal, idVacina));
     }
     
+
+    @Autowired
+    private VacinaService vacinaService;
+
+    @Autowired 
+    private AnimalService animalService;
 }

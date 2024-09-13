@@ -55,7 +55,8 @@ public class Animal {
     @Column(nullable = false)
     private String corDoPelo;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true )
+    @JoinColumn(name = "vacina_id")
     private List<Vacina> vacinas;
 
     @OneToMany
@@ -68,6 +69,9 @@ public class Animal {
     private List<Consulta> consultas;
     
     
+    public void addVacina(Vacina vacina) {
+        this.vacinas.add(vacina);
+    }
 
 
 }
