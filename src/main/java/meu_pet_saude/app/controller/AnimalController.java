@@ -1,7 +1,6 @@
 package meu_pet_saude.app.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import meu_pet_saude.app.model.CarrapatoPulga;
 import meu_pet_saude.app.model.Consulta;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
-import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.CarrapatoPulgaService;
 import meu_pet_saude.app.service.ConsultaService;
@@ -151,9 +149,6 @@ public class AnimalController {
 
     @Autowired
     private AnimalService animalService;
-
-    @Autowired
-    private AnimalRepository animalRepository;
 
     @Autowired
     private VacinaService vacinaService;

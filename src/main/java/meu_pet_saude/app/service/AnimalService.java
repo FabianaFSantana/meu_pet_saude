@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Tutor;
+import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.TutorRepository;
+import meu_pet_saude.app.repository.VacinaRepository;
 
 @Service
 public class AnimalService {
@@ -28,7 +30,7 @@ public class AnimalService {
         }
         return null;
     }
-
+    
     public List<Animal> exibirListaDeAnimaisDoTutor(Long idTutor) {
         Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
 
@@ -70,5 +72,8 @@ public class AnimalService {
 
     @Autowired
     private TutorRepository tutorRepository;
+
+    @Autowired 
+    private VacinaRepository vacinaRepository;
 
 }
