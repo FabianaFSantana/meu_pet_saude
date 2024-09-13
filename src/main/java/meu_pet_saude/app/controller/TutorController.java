@@ -1,7 +1,6 @@
 package meu_pet_saude.app.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Animal;
-import meu_pet_saude.app.model.Endereco;
 import meu_pet_saude.app.model.Tutor;
-import meu_pet_saude.app.repository.TutorRepository;
 import meu_pet_saude.app.service.AnimalService;
-import meu_pet_saude.app.service.ViaCepEnderecoService;
+import meu_pet_saude.app.service.TutorService;
 
 @RestController
 @RequestMapping("/tutor")
@@ -31,35 +28,24 @@ public class TutorController {
     @PostMapping
     public ResponseEntity<Tutor> cadastrarTutor(@RequestBody Tutor tutor){
          return ResponseEntity.status(HttpStatus.CREATED)
-        .body(tutorRepository.save(tutor));
-    }
-
-    @PostMapping("/cadastrarEndereco/{id}")
-    public ResponseEntity<String> atualizarEnderecoDoTutor(@PathVariable("id") Long id, @RequestBody Endereco endereco) {
-        viaCepEnderecoService.buscarEnderecoPorCep(id, endereco.getCep());
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Endereço cadastrado!");
-       
+        .body(tutorService.salvarTutor(tutor));
     }
 
     @PostMapping("/{idTutor}/adicionarAnimalNaLista/{idAnimal}")
     public ResponseEntity<String> adicionarAnimal(@PathVariable("idTutor") Long idTutor,
     @PathVariable("idAnimal") Long idAnimal) {
         animalService.adicionarAnimalNaListaDeAnimaisDeTutor(idTutor, idAnimal);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Animal adiconado à lista do tutor.");
+        return ResponseEntity.status(HttpStatus.OK).body("Animal adiconado à lista do tutor.");
     }
 
     @GetMapping
     public ResponseEntity<List<Tutor>> exibirTutores() {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(tutorRepository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(tutorService.buscarTutores());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Tutor>> buscarTutorPeloId(@PathVariable("id") Long id) {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(tutorRepository.findById(id));
+    public ResponseEntity<Tutor> exibirTutorPeloId(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(tutorService.buscarTutorPeloId(id));
     }
 
     @GetMapping("/exibirListaDeAnimaisTutor/{idTutor}")
@@ -72,52 +58,19 @@ public class TutorController {
     @PutMapping("/{id}")
     public ResponseEntity<Tutor> atualizarTutorPeloId(@PathVariable("id") Long id,
     @RequestBody Tutor tutor) {
-        Optional<Tutor> tutorOptional = tutorRepository.findById(id);
-
-        if (tutorOptional.isPresent()) {
-            Tutor tutorEncont = tutorOptional.get();
-
-            tutorEncont.setNome(tutor.getNome());
-            tutorEncont.setDataDeNascimento(tutor.getDataDeNascimento());
-            tutorEncont.setTelefone(tutor.getTelefone());
-            tutorEncont.setEmail(tutor.getEmail());
-            tutorEncont.getEndereco().setCep(tutor.getEndereco().getCep());
-            tutorEncont.getEndereco().setEndereco(tutor.getEndereco().getEndereco());
-            tutorEncont.getEndereco().setNumero(tutor.getEndereco().getNumero());
-            tutorEncont.getEndereco().setComplemento(tutor.getEndereco().getComplemento());
-            tutorEncont.getEndereco().setBairro(tutor.getEndereco().getBairro());
-            tutorEncont.getEndereco().setCidade(tutor.getEndereco().getCidade());
-            tutorEncont.getEndereco().setEstado(tutor.getEndereco().getEstado());
-            tutorEncont.getEndereco().setPais(tutor.getEndereco().getPais());
-
-            return ResponseEntity.status(HttpStatus.OK)
-            .body(tutorRepository.save(tutorEncont));
-        }
-        return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.OK).body(tutorService.atualizarDadosTutor(id, tutor));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> excluirTutor(@PathVariable("id") Long id) {
-        tutorRepository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Tutor exluído com sucesso!");
+        return ResponseEntity.status(HttpStatus.OK).body(tutorService.excluirTutor(id));
     }
 
-    @DeleteMapping("/{idTutor}/removerAnimalDaLista/{idAnimal}")
-    public ResponseEntity<String> removerAnimalDaLista(@PathVariable("idTutor") Long idTutor,
-    @PathVariable("idAnimal") Long idAnimal) {
-        animalService.removerAnimalDaLista(idTutor, idAnimal);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Animal removido com sucesso da lista.");
-    }
-
-    @Autowired
-    private TutorRepository tutorRepository;
-
-    @Autowired
-    private ViaCepEnderecoService viaCepEnderecoService;
 
     @Autowired
     private AnimalService animalService;
+
+    @Autowired
+    private TutorService tutorService;
 
 }
