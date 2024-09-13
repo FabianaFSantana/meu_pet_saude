@@ -43,8 +43,11 @@ public class Tutor {
     @Embedded
     private Endereco endereco;
 
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "tutor_id")
     private List<Animal> animais;
 
+    public void addAnimal(Animal animal) {
+        this.animais.add(animal);
+    }
 }

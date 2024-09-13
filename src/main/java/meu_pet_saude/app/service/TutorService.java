@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import meu_pet_saude.app.dto.EnderecoDTO;
+import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Endereco;
 import meu_pet_saude.app.model.Tutor;
+import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.TutorRepository;
 
 @Service
@@ -25,6 +27,21 @@ public class TutorService {
         endereco.setUf(enderecoDTO.getUf());
 
         return tutorRepository.save(tutor);
+    }
+
+    public Animal adicionarAnimalNaListaDeTutor(Long id, Animal animal) {
+        Optional<Tutor> tutorOptional = tutorRepository.findById(id);
+
+        if (tutorOptional.isPresent()) {
+            Tutor tutor = tutorOptional.get();
+
+            tutor.addAnimal(animal);
+            animalRepository.save(animal);
+            tutorRepository.save(tutor);
+
+            return animal;   
+        }
+        return null;
     }
 
     public List<Tutor> buscarTutores() {
@@ -75,4 +92,7 @@ public class TutorService {
 
     @Autowired
     private ViaCepEnderecoService viaCepEnderecoService;
+
+    @Autowired
+    private AnimalRepository animalRepository;
 }

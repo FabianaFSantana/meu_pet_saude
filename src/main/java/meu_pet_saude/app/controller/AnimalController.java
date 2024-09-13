@@ -1,7 +1,6 @@
 package meu_pet_saude.app.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,9 +19,10 @@ import meu_pet_saude.app.model.CarrapatoPulga;
 import meu_pet_saude.app.model.Consulta;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
-import meu_pet_saude.app.repository.AnimalRepository;
+import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.CarrapatoPulgaService;
 import meu_pet_saude.app.service.ConsultaService;
+import meu_pet_saude.app.service.TutorService;
 import meu_pet_saude.app.service.VacinaService;
 import meu_pet_saude.app.service.VermifugacaoService;
 
@@ -30,25 +30,10 @@ import meu_pet_saude.app.service.VermifugacaoService;
 @RequestMapping("/animal")
 public class AnimalController {
 
-    @Autowired
-    private AnimalRepository animalRepository;
-
-    @Autowired
-    private VacinaService vacinaService;
-
-    @Autowired
-    private VermifugacaoService vermifugacaoService;
-
-    @Autowired
-    private CarrapatoPulgaService carrapatoPulgaService;
-
-    @Autowired
-    private ConsultaService consultaService;
-
-    @PostMapping
-    public ResponseEntity<Animal> cadastrarAnimal(@RequestBody Animal animal) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-        .body(animalRepository.save(animal));
+    @PostMapping("/{tutor_id}")
+    public ResponseEntity<Animal> cadastrarAnimal(@PathVariable("tutor_id") Long id, @RequestBody Animal animal) {
+        Animal novoAnimal = tutorService.adicionarAnimalNaListaDeTutor(id, animal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
     }
 
     @PostMapping("/{idAnimal}/adicionarVacinaListaAnimal/{idVacina}")
@@ -85,13 +70,12 @@ public class AnimalController {
 
     @GetMapping
     public ResponseEntity<List<Animal>> exibirListaDeAnimais() {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(animalRepository.findAll());
+        return ResponseEntity.status(HttpStatus.OK).body(animalService.exibirListaDeAnimais());
     }
 
-    @GetMapping("/{idAnimal}")
-    public ResponseEntity<Optional<Animal>> buscarAnimalPeloId(@PathVariable("idAnimal") Long idAnimal) {
-        return ResponseEntity.status(HttpStatus.OK).body(animalRepository.findById(idAnimal));
+    @GetMapping("/{animal_id}")
+    public ResponseEntity<Animal> buscarAnimalPeloId(@PathVariable("animal_id") Long idAnimal) {
+        return ResponseEntity.status(HttpStatus.OK).body(animalService.buscarAnimalPeloId(idAnimal));
     }
 
     @GetMapping("/exibirListaDeVacinas/{idAnimal}")
@@ -118,36 +102,14 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.OK).body(consultas);
     }
 
-    @PutMapping("/{idAnimal}")
-    public ResponseEntity<Animal> atualizarDadosDoAnimal(@PathVariable("idAnimal") Long idAnimal, 
-    @RequestBody Animal animal){
-        Optional<Animal> animOptional = animalRepository.findById(idAnimal);
-
-        if (animOptional.isPresent()) {
-            Animal animalEncont = animOptional.get();
-
-            animalEncont.setNome(animal.getNome());
-            animalEncont.setEspecie(animal.getEspecie());
-            animalEncont.setRaca(animal.getRaca());
-            animalEncont.setGenero(animal.getGenero());
-            animalEncont.setDataDeNascimento(animal.getDataDeNascimento());
-            animalEncont.setPeso(animal.getPeso());
-            animalEncont.setCorDoPelo(animal.getCorDoPelo());
-
-            return ResponseEntity.status(HttpStatus.OK)
-            .body(animalRepository.save(animalEncont));
-            
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
+    @PutMapping("/{animal_id}")
+    public ResponseEntity<Animal> atualizarDadosDoAnimal(@PathVariable("animal_id") Long idAnimal, @RequestBody Animal animal){
+        return ResponseEntity.status(HttpStatus.OK).body(animalService.atualizarDadosDoAnimal(idAnimal, animal));
     }
 
-    @DeleteMapping("/{idAnimal}")
-    public ResponseEntity<String> excluirCadastroAnimal(@PathVariable("idAnimal") Long idAnimal) {
-        animalRepository.deleteById(idAnimal);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Cadastro do animal excluído com sucesso!");
+    @DeleteMapping("/{animal_id}")
+    public ResponseEntity<String> excluirCadastroAnimal(@PathVariable("animal_id") Long idAnimal) {
+        return ResponseEntity.status(HttpStatus.OK).body(animalService.excluirAnimal(idAnimal));
     }
 
     @DeleteMapping("/{idAnimal}/removerVacinaDaLista/{idVacina}")
@@ -181,6 +143,24 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.OK)
         .body("Consulta removida da lista do animal.");
     }
+
+    @Autowired
+    private TutorService tutorService;
+
+    @Autowired
+    private AnimalService animalService;
+
+    @Autowired
+    private VacinaService vacinaService;
+
+    @Autowired
+    private VermifugacaoService vermifugacaoService;
+
+    @Autowired
+    private CarrapatoPulgaService carrapatoPulgaService;
+
+    @Autowired
+    private ConsultaService consultaService;
 
 
     

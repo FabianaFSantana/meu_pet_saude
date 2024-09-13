@@ -31,13 +31,6 @@ public class TutorController {
         .body(tutorService.salvarTutor(tutor));
     }
 
-    @PostMapping("/{idTutor}/adicionarAnimalNaLista/{idAnimal}")
-    public ResponseEntity<String> adicionarAnimal(@PathVariable("idTutor") Long idTutor,
-    @PathVariable("idAnimal") Long idAnimal) {
-        animalService.adicionarAnimalNaListaDeAnimaisDeTutor(idTutor, idAnimal);
-        return ResponseEntity.status(HttpStatus.OK).body("Animal adiconado à lista do tutor.");
-    }
-
     @GetMapping
     public ResponseEntity<List<Tutor>> exibirTutores() {
         return ResponseEntity.status(HttpStatus.OK).body(tutorService.buscarTutores());
