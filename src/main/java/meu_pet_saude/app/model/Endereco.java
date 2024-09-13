@@ -11,16 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Embeddable
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Endereco {
 
     private String cep;
-    private String endereco;
+    private String logradouro;
     private String numero;
     private String complemento;
     private String bairro;
     private String cidade;
-    private String estado;
-    private String pais;
-
+    private String uf;
 }

@@ -26,14 +26,7 @@ import meu_pet_saude.app.service.ViaCepEnderecoService;
 @RequestMapping("/tutor")
 public class TutorController {
 
-    @Autowired
-    private TutorRepository tutorRepository;
 
-    @Autowired
-    private ViaCepEnderecoService viaCepEnderecoService;
-
-    @Autowired
-    private AnimalService animalService;
 
     @PostMapping
     public ResponseEntity<Tutor> cadastrarTutor(@RequestBody Tutor tutor){
@@ -117,5 +110,14 @@ public class TutorController {
         return ResponseEntity.status(HttpStatus.OK)
         .body("Animal removido com sucesso da lista.");
     }
+
+    @Autowired
+    private TutorRepository tutorRepository;
+
+    @Autowired
+    private ViaCepEnderecoService viaCepEnderecoService;
+
+    @Autowired
+    private AnimalService animalService;
 
 }

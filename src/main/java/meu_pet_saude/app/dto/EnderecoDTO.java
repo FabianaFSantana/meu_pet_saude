@@ -1,6 +1,4 @@
-package meu_pet_saude.app.model;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package meu_pet_saude.app.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,21 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class ViaCepEndereco {
-
-    @JsonProperty("cep")
+public class EnderecoDTO {
+    
     private String cep;
-
-    @JsonProperty("logradouro")
     private String logradouro;
-
-    @JsonProperty("bairro")
     private String bairro;
-
-    @JsonProperty("localidade")
     private String localidade;
-
-    @JsonProperty("uf")
     private String uf;
 }
