@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Tutor;
@@ -30,7 +31,22 @@ public class AnimalService {
         }
         return null;
     }
-    
+
+    public Vacina adicinarVacinaNaListaDoAnimal(Long id, Vacina vacina) {
+        Optional<Animal> animalOptional = animalRepository.findById(id);
+
+        if (animalOptional.isPresent()) {
+            Animal animal = animalOptional.get();
+
+            animal.addVacina(vacina);
+            vacinaRepository.save(vacina);
+            animalRepository.save(animal);
+            
+            return vacina;
+        }
+        return null;
+    }
+
     public List<Animal> exibirListaDeAnimaisDoTutor(Long idTutor) {
         Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
 
@@ -62,9 +78,27 @@ public class AnimalService {
         return null;
     }
 
-    public String excluirAnimal(Long id) {
-        animalRepository.deleteById(id);
-        return "Animal removido com sucesso!";
+    @Transactional
+    public String excluirAnimal(Long idTutor, Long idAnimal) {
+        
+        Tutor tutor = tutorRepository.findById(idTutor).orElse(null);
+        Animal animal = animalRepository.findById(idAnimal).orElse(null);
+
+        if (tutor == null) {
+            return "Tutor não encontrado!";
+        }
+
+        if (animal == null) {
+            return "Animal não encontrado!";
+        }
+
+        List<Animal> animais = tutor.getAnimais();
+        if (animais.remove(animal)) {
+            tutorRepository.save(tutor);
+            animalRepository.deleteById(idAnimal);
+            return "Animal removido com sucesso!";
+        }
+        return "Animal não encontrado na lista do tutor!";
     }
 
     @Autowired

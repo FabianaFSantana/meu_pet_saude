@@ -36,14 +36,6 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
     }
 
-    @PostMapping("/{idAnimal}/adicionarVacinaListaAnimal/{idVacina}")
-    public ResponseEntity<String> adicionarVacinaLista(@PathVariable("idAnimal") Long idAnimal,
-    @PathVariable("idVacina") Long idVacina) {
-        vacinaService.adicionarVacinaListaDeVacinasAnimal(idAnimal, idVacina);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Vacina adicionada à lista de vacinas do Animal");
-    }
-
     @PostMapping("/{idAnimal}/adicionarVermifugoListaAnimal/{idVerm}")
     public ResponseEntity<String> adicionarVermigudoLista(@PathVariable("idAnimal") Long idAnimal,
     @PathVariable("idVerm") Long idVerm) {
@@ -78,10 +70,9 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.OK).body(animalService.buscarAnimalPeloId(idAnimal));
     }
 
-    @GetMapping("/exibirListaDeVacinas/{idAnimal}")
-    public ResponseEntity<List<Vacina>> exibirListaDeVacinas(@PathVariable("idAnimal") Long idAnimal) {
-        List<Vacina> vacinas = vacinaService.exibirListaDeVacinas(idAnimal);
-        return ResponseEntity.status(HttpStatus.OK).body(vacinas);
+    @GetMapping("/exibirListaDeVacinas/{animal_id}")
+    public ResponseEntity<List<Vacina>> exibirListaDeVacinas(@PathVariable("animal_id") Long idAnimal) {
+        return ResponseEntity.status(HttpStatus.OK).body(vacinaService.exibirListaDeVacinas(idAnimal));
     }
 
     @GetMapping("/exibirListaDeVermifugos/{idAnimal}")
@@ -107,17 +98,9 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.OK).body(animalService.atualizarDadosDoAnimal(idAnimal, animal));
     }
 
-    @DeleteMapping("/{animal_id}")
-    public ResponseEntity<String> excluirCadastroAnimal(@PathVariable("animal_id") Long idAnimal) {
-        return ResponseEntity.status(HttpStatus.OK).body(animalService.excluirAnimal(idAnimal));
-    }
-
-    @DeleteMapping("/{idAnimal}/removerVacinaDaLista/{idVacina}")
-    public ResponseEntity<String> removerVacinaDaLista(@PathVariable("idAnimal") Long idAnimal,
-    @PathVariable("idVacina") Long idVacina) {
-        vacinaService.removerVacinaDaLista(idAnimal, idVacina);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Vacina removida da lista de vacinas.");
+    @DeleteMapping("/{tutor_id}/excluirAnimal/{animal_id}")
+    public ResponseEntity<String> excluirCadastroAnimal(@PathVariable("tutor_id") Long id, @PathVariable("animal_id") Long idAnimal) {
+        return ResponseEntity.status(HttpStatus.OK).body(animalService.excluirAnimal(id, idAnimal));
     }
 
     @DeleteMapping("/{idAnimal}/removerVermifugoDaLista/{idVerm}")
