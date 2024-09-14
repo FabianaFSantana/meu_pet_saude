@@ -59,7 +59,8 @@ public class Animal {
     @JoinColumn(name = "vacina_id")
     private List<Vacina> vacinas;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
+    @JoinColumn(name = "vermifugo_id")
     private List<Vermifugacao> vermifugos;
 
     @OneToMany
@@ -71,6 +72,10 @@ public class Animal {
     
     public void addVacina(Vacina vacina) {
         this.vacinas.add(vacina);
+    }
+
+    public void addVermifugo(Vermifugacao vermifugacao) {
+        this.vermifugos.add(vermifugacao);
     }
 
 

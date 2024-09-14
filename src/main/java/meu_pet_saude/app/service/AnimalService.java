@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.model.Vacina;
+import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.TutorRepository;
 import meu_pet_saude.app.repository.VacinaRepository;
+import meu_pet_saude.app.repository.VermifugacaoRepository;
 
 @Service
 public class AnimalService {
@@ -32,7 +34,7 @@ public class AnimalService {
         return null;
     }
 
-    public Vacina adicinarVacinaNaListaDoAnimal(Long id, Vacina vacina) {
+    public Vacina adicionarVacinaNaListaDoAnimal(Long id, Vacina vacina) {
         Optional<Animal> animalOptional = animalRepository.findById(id);
 
         if (animalOptional.isPresent()) {
@@ -43,6 +45,21 @@ public class AnimalService {
             animalRepository.save(animal);
             
             return vacina;
+        }
+        return null;
+    }
+
+    public Vermifugacao adicionarVermifugoListaAnimal(Long id, Vermifugacao vermifugacao) {
+        Optional<Animal> animOptional = animalRepository.findById(id);
+
+        if (animOptional.isPresent()) {
+            Animal animal = animOptional.get();
+
+            animal.getVermifugos().add(vermifugacao);
+            vermifugacaoRepository.save(vermifugacao);
+            animalRepository.save(animal);
+
+            return vermifugacao;
         }
         return null;
     }
@@ -109,5 +126,8 @@ public class AnimalService {
 
     @Autowired 
     private VacinaRepository vacinaRepository;
+
+    @Autowired 
+    private VermifugacaoRepository vermifugacaoRepository;
 
 }

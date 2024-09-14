@@ -17,25 +17,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Vermifugacao;
+import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.VermifugacaoRepository;
+import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.VermifugacaoService;
 
 @RestController
 @RequestMapping("/vermifugacao")
 public class VermifugacaoController {
 
-    @Autowired
-    private VermifugacaoRepository vermifugacaoRepository;
-
-    @Autowired 
-    private VermifugacaoService vermifugacaoService;
-
-    @PostMapping
-    public ResponseEntity<Vermifugacao> cadastrarVermifugacao(@RequestBody Vermifugacao vermifugacao) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-        .body(vermifugacaoRepository.save(vermifugacao));
+    @PostMapping("/{animal_id}")
+    public ResponseEntity<Vermifugacao> cadastrarVermifugacao(@PathVariable("animal_id") Long idAnimal, @RequestBody Vermifugacao vermifugacao) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(animalService.adicionarVermifugoListaAnimal(idAnimal, vermifugacao));
     }
 
+    @GetMapping
+    public ResponseEntity<List<Vermifugacao>> exibirListaDeTodosVermifugos() {
+        return ResponseEntity.status(HttpStatus.OK).body(vermifugacaoService.buscarVermifugos());
+    }
+
+    @GetMapping("/{verm_id}")
+    public ResponseEntity<Vermifugacao> exibirVermifugacaoPeloId(@PathVariable("verm_id") Long idVerm) {
+        return ResponseEntity.status(HttpStatus.OK).body(vermifugacaoService.buscarVermifugacaoPorId(idVerm));
+    }
+
+    @PutMapping("/{verm_id}")
+    public ResponseEntity<Vermifugacao> atualizarDadosDaVermifugacao(@PathVariable("verm_id") Long idVerm, @RequestBody Vermifugacao vermifugacao) {
+                    
+        return ResponseEntity.status(HttpStatus.OK).body(vermifugacaoService.atualizarDadosVermifufo(idVerm, vermifugacao));
+    } 
+
+    @DeleteMapping("/{animal_id}/excluirvermifugo/{verm_id}")
+    public ResponseEntity<String> excluirDadosDeVermifugacao(@PathVariable("animal_id") Long idAnimal, @PathVariable("verm_id") Long idVerm) {
+        return ResponseEntity.status(HttpStatus.OK).body(vermifugacaoService.removerVermifugo(idAnimal, idVerm));
+    }
+
+    
+    
+
+   /* 
+     
     @PostMapping("/{idTutor}/enviarLembreteDeVermifugacaoPorEmail/{proximaDose}")
     public ResponseEntity<String> enviarLembreteVermifPorEmail(@PathVariable("idTutor") Long idTutor,
     @PathVariable("proximaDose") LocalDate proximaDose) {
@@ -45,44 +66,11 @@ public class VermifugacaoController {
         .body("Lembrete de vermífugo enviado com sucesso!");
     }
 
-    @GetMapping
-    public ResponseEntity<List<Vermifugacao>> exibirListaDeVermifugacao() {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(vermifugacaoRepository.findAll());
-    }
+    */
+    @Autowired
+    private AnimalService animalService;
 
-    @GetMapping("/{idVerm}")
-    public ResponseEntity<Optional<Vermifugacao>> exibirVermifugacaoPeloId(@PathVariable("idVerm") Long idVerm) {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(vermifugacaoRepository.findById(idVerm));
-    }
-    
-    @PutMapping("/{idVerm}")
-    public ResponseEntity<Vermifugacao> atualizarDadosDaVermifugacao(@PathVariable("idVerm") Long idVerm,
-    @RequestBody Vermifugacao vermifugacao) {
-        Optional<Vermifugacao> vermOptional = vermifugacaoRepository.findById(idVerm);
-
-        if (vermOptional.isPresent()) {
-            Vermifugacao vermEncontrada = vermOptional.get();
-
-            vermEncontrada.setNomeMedic(vermifugacao.getNomeMedic());
-            vermEncontrada.setPeso(vermifugacao.getPeso());
-            vermEncontrada.setDosagem(vermifugacao.getDosagem());
-            vermEncontrada.setData(vermifugacao.getData());
-            vermEncontrada.setProximaDose(vermifugacao.getProximaDose());
-
-            return ResponseEntity.status(HttpStatus.OK)
-            .body(vermifugacaoRepository.save(vermEncontrada));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @DeleteMapping("/{idVerm}")
-    public ResponseEntity<String> excluirDadosDeVermifugacao(@PathVariable("idVerm") Long idVerm) {
-        vermifugacaoRepository.deleteById(idVerm);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Dados excluídos com sucesso!");
-    }
+    @Autowired 
+    private VermifugacaoService vermifugacaoService;
 
 }
