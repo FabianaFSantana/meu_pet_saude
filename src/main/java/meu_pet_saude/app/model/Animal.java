@@ -74,5 +74,9 @@ public class Animal {
         this.vacinas.add(vacina);
     }
 
+    public void addVermifugo(Vermifugacao vermifugacao) {
+        this.vermifugos.add(vermifugacao);
+    }
+
 
 }

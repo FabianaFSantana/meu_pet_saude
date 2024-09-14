@@ -36,14 +36,6 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
     }
 
-    @PostMapping("/{idAnimal}/adicionarVermifugoListaAnimal/{idVerm}")
-    public ResponseEntity<String> adicionarVermigudoLista(@PathVariable("idAnimal") Long idAnimal,
-    @PathVariable("idVerm") Long idVerm) {
-        vermifugacaoService.adicionarVermifugacao(idAnimal, idVerm);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Vermifugo adicionado à lista do animal.");
-    }
-
     @PostMapping("/{idAnimal}/adicionarCarrapListaAnimal/{idCarrap}")
     public ResponseEntity<String> adicionarCarrapListaAnimal(@PathVariable("idAnimal") Long idAnimal,
     @PathVariable("idCarrap") Long idCarrap) {
@@ -101,14 +93,6 @@ public class AnimalController {
     @DeleteMapping("/{tutor_id}/excluirAnimal/{animal_id}")
     public ResponseEntity<String> excluirCadastroAnimal(@PathVariable("tutor_id") Long id, @PathVariable("animal_id") Long idAnimal) {
         return ResponseEntity.status(HttpStatus.OK).body(animalService.excluirAnimal(id, idAnimal));
-    }
-
-    @DeleteMapping("/{idAnimal}/removerVermifugoDaLista/{idVerm}")
-    public ResponseEntity<String> removerVermifugoDaLista(@PathVariable("idAnimal") Long idAnimal,
-    @PathVariable("idVerm") Long idVerm) {
-        vermifugacaoService.removerVermifugoDaLista(idAnimal, idVerm);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Vermífugo removido com sucesso.");
     }
 
     @DeleteMapping("/{idAnimal}/removerCarrapDaLista/{idCarrap}")

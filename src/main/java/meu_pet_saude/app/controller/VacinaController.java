@@ -2,7 +2,6 @@ package meu_pet_saude.app.controller;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public class VacinaController {
     @PostMapping("/{animal_id}")
     public ResponseEntity<Vacina> cadastrarVacina(@PathVariable("animal_id") Long idAnimal, @RequestBody Vacina vacina) {
 
-        Vacina novaVacina = animalService.adicinarVacinaNaListaDoAnimal(idAnimal, vacina);
+        Vacina novaVacina = animalService.adicionarVacinaNaListaDoAnimal(idAnimal, vacina);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaVacina);
     }
 

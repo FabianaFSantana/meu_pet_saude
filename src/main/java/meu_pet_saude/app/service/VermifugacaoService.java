@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
 import meu_pet_saude.app.model.Animal;
@@ -20,40 +21,6 @@ import meu_pet_saude.app.repository.VermifugacaoRepository;
 @Service
 public class VermifugacaoService {
 
-    @Autowired
-    private AnimalRepository animalRepository;
-
-    @Autowired
-    private VermifugacaoRepository vermifugacaoRepository;
-
-    @Autowired
-    private TutorRepository tutorRepository;
-
-    @Autowired
-    private EmailService emailService;
-    
-    public void adicionarVermifugacao(Long idAnimal, Long idVerm) {
-        
-        Optional<Animal> animalOptional = animalRepository.findById(idAnimal);
-        if (animalOptional.isPresent()) {
-            Animal animal = animalOptional.get();
-
-            Optional<Vermifugacao> vermOptional = vermifugacaoRepository.findById(idVerm);
-            if (vermOptional.isPresent()) {
-                Vermifugacao vermifugo = vermOptional.get();
-
-                List<Vermifugacao> vermifugos = animal.getVermifugos();
-                vermifugos.add(vermifugo);
-                animalRepository.save(animal);
-                
-            } else {
-                throw new EntityNotFoundException("Vermifugo não encntrado.");
-            }
-
-        } else {
-            throw new EntityNotFoundException("Animal não encontrado.");
-        }
-    }
 
     public List<Vermifugacao> exibirListaDeVermifugosDoAnimal(Long idAnimal) {
         
@@ -65,30 +32,60 @@ public class VermifugacaoService {
         } else {
             return Collections.emptyList();
         }
-
     }
 
-    public void removerVermifugoDaLista(Long idAnimal, Long idVerm) {
+    public List<Vermifugacao> buscarVermifugos() {
+        return vermifugacaoRepository.findAll();
+    }
 
-        Optional<Animal> animOptional = animalRepository.findById(idAnimal);
-        if (animOptional.isPresent()) {
-            Animal animalEncont = animOptional.get();
+    public Vermifugacao buscarVermifugacaoPorId(Long idVerm) {
+        Optional<Vermifugacao> vermOptional = vermifugacaoRepository.findById(idVerm);
 
-            Optional<Vermifugacao> vermOptional = vermifugacaoRepository.findById(idVerm);
-            if (vermOptional.isPresent()) {
-                Vermifugacao vermifugo = vermOptional.get();
+        if (vermOptional.isPresent()) {
+            Vermifugacao vermifugo = vermOptional.get();
+            return vermifugo;
+        }
+        return null;
+    }
 
-                List<Vermifugacao> vermifugos = animalEncont.getVermifugos();
-                vermifugos.remove(vermifugo);
-                animalRepository.save(animalEncont);
-                
-            } else {
-                throw new EntityNotFoundException("Vermifugo não foi encontrado.");
+    public Vermifugacao atualizarDadosVermifufo(Long idVerm, Vermifugacao vermifugacao) {
+        Optional<Vermifugacao> vermOptional = vermifugacaoRepository.findById(idVerm);
+
+        if (vermOptional.isPresent()) {
+            Vermifugacao vermEncontrada = vermOptional.get();
+
+            vermEncontrada.setNomeMedic(vermifugacao.getNomeMedic());
+            vermEncontrada.setPeso(vermifugacao.getPeso());
+            vermEncontrada.setDosagem(vermifugacao.getDosagem());
+            vermEncontrada.setData(vermifugacao.getData());
+            vermEncontrada.setProximaDose(vermifugacao.getProximaDose());
+
+            return vermifugacaoRepository.save(vermEncontrada);
+        }
+        return null;
+
+    }
+    
+    @Transactional
+    public String removerVermifugo(Long idAnimal, Long idVerm) {
+            Animal animal = animalRepository.findById(idAnimal).orElse(null);
+            Vermifugacao vermifugo = vermifugacaoRepository.findById(idVerm).orElse(null);
+
+            if (animal == null) {
+                return "Animal não encontrado!";
             }
             
-        } else {
-            throw new EntityNotFoundException("Animal não foi encontrado.");
-        }
+            if (vermifugo == null) {
+                return "Vermífugo não encontrado!";
+            }
+
+            List<Vermifugacao> vermifugos = animal.getVermifugos();
+            if (vermifugos.remove(vermifugo)) {
+                animalRepository.save(animal);
+                vermifugacaoRepository.deleteById(idVerm);
+                return "Vermífugo removido com sucesso!";
+            }
+            return "Vermífugo não encontrado na lista do animal!";
     }
 
     public List<Vermifugacao> exibirListaDeVermifugosNaDataAtual(Long idTutor, LocalDate proximaDose) {
@@ -118,4 +115,16 @@ public class VermifugacaoService {
         }
         return vermifugosHoje;
     }
+
+    @Autowired
+    private AnimalRepository animalRepository;
+
+    @Autowired
+    private VermifugacaoRepository vermifugacaoRepository;
+
+    @Autowired
+    private TutorRepository tutorRepository;
+
+    @Autowired
+    private EmailService emailService;
 }
