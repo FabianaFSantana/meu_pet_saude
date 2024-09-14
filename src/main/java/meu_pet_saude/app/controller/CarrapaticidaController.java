@@ -15,29 +15,27 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import meu_pet_saude.app.model.CarrapatoPulga;
-import meu_pet_saude.app.repository.CarrapatoPulgaRepository;
-import meu_pet_saude.app.service.CarrapatoPulgaService;
+import meu_pet_saude.app.model.Carrapaticida;
+import meu_pet_saude.app.service.AnimalService;
+import meu_pet_saude.app.service.CarrapaticidaService;
 
 @RestController
 @RequestMapping("/carrapatoPulga")
-public class CarrapatoPulgaController {
+public class CarrapaticidaController {
 
-    @Autowired
-    private CarrapatoPulgaRepository carrapatoPulgaRepository;
-
-    @Autowired
-    private CarrapatoPulgaService carrapatoPulgaService;
-
-
-    @PostMapping
-    public ResponseEntity<CarrapatoPulga> cadastrarDosagem(@RequestBody CarrapatoPulga carrapatoPulga) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-        .body(carrapatoPulgaRepository.save(carrapatoPulga));
+    @PostMapping("/{animal_id}")
+    public ResponseEntity<Carrapaticida> cadastrarDosagem(@PathVariable("animal_id") Long idAnimal, @RequestBody Carrapaticida carrapatoPulga) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(animalService.adicionarCarrapaticidaListaAnimal(idAnimal, carrapatoPulga));
     }
 
-    @PostMapping("/{idTutor}/enviarLembreteDeCarrapaticidaPorEmail/{proximaDose}")
+    @GetMapping("/{carrap_id}")
+    public ResponseEntity<Carrapaticida> exibirCarrapaticidaPeloId(@PathVariable("carrap_id") Long idCarrap) {
+        return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.buscarCarrapaticidaPeloId(idCarrap));
+    }
+
+
+
+/*     @PostMapping("/{idTutor}/enviarLembreteDeCarrapaticidaPorEmail/{proximaDose}")
     public ResponseEntity<String> enviarLembreteCarrapaticidaEmail(@PathVariable("idTutor") Long idTutor,
     @PathVariable("proximaDose") LocalDate proximaDose) {
 
@@ -47,23 +45,23 @@ public class CarrapatoPulgaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CarrapatoPulga>> listarDosagensDadas() {
+    public ResponseEntity<List<Carrapaticida>> listarDosagensDadas() {
         return ResponseEntity.status(HttpStatus.OK)
         .body(carrapatoPulgaRepository.findAll());
     }
 
     @GetMapping("/{idCarrap}")
-    public ResponseEntity<Optional<CarrapatoPulga>> localizarDosagemPeloId(@PathVariable("idCarrap") Long idCarrap) {
+    public ResponseEntity<Optional<Carrapaticida>> localizarDosagemPeloId(@PathVariable("idCarrap") Long idCarrap) {
         return ResponseEntity.status(HttpStatus.OK)
         .body(carrapatoPulgaRepository.findById(idCarrap));
     }
 
     @GetMapping("/data/{data}")
-    public ResponseEntity<CarrapatoPulga> buscarDosagemPorData(@PathVariable("data") LocalDate data) {
-       Optional<CarrapatoPulga> carrapOptional = carrapatoPulgaRepository.findByDosagemData(data);
+    public ResponseEntity<Carrapaticida> buscarDosagemPorData(@PathVariable("data") LocalDate data) {
+       Optional<Carrapaticida> carrapOptional = carrapatoPulgaRepository.findByDosagemData(data);
 
        if (carrapOptional.isPresent()) {
-        CarrapatoPulga carrap = carrapOptional.get();
+        Carrapaticida carrap = carrapOptional.get();
         return ResponseEntity.status(HttpStatus.OK)
         .body(carrap);
         
@@ -73,12 +71,12 @@ public class CarrapatoPulgaController {
     }
 
     @PutMapping("/{idCarrap}")
-    public ResponseEntity<CarrapatoPulga> atualizarDadosMedicacao(@PathVariable("idCarrap") Long idCarrap,
-    @RequestBody CarrapatoPulga carrapatoPulga) {
-        Optional<CarrapatoPulga> carrapOptional = carrapatoPulgaRepository.findById(idCarrap);
+    public ResponseEntity<Carrapaticida> atualizarDadosMedicacao(@PathVariable("idCarrap") Long idCarrap,
+    @RequestBody Carrapaticida carrapatoPulga) {
+        Optional<Carrapaticida> carrapOptional = carrapatoPulgaRepository.findById(idCarrap);
 
         if (carrapOptional.isPresent()) {
-            CarrapatoPulga carrapEncontrado = carrapOptional.get();
+            Carrapaticida carrapEncontrado = carrapOptional.get();
 
             carrapEncontrado.setNomeMedic(carrapatoPulga.getNomeMedic());
             carrapEncontrado.setPeso(carrapatoPulga.getPeso());
@@ -98,6 +96,13 @@ public class CarrapatoPulgaController {
         carrapatoPulgaRepository.deleteById(idCarrap);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Medicação excluída com sucesso");
-    }
+    } */
     
+    @Autowired
+    private CarrapaticidaService carrapaticidaService;
+
+    @Autowired
+    private AnimalService animalService;
+
+
 }

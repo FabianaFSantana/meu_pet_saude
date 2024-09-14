@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "carrapPulga")
-public class CarrapatoPulga {
+public class Carrapaticida {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

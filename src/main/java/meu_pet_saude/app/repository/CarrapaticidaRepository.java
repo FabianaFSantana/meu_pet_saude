@@ -8,12 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import meu_pet_saude.app.model.CarrapatoPulga;
+import meu_pet_saude.app.model.Carrapaticida;
 
 @Repository
-public interface CarrapatoPulgaRepository extends JpaRepository<CarrapatoPulga, Long> {
+public interface CarrapaticidaRepository extends JpaRepository<Carrapaticida, Long> {
     
     @Query("SELECT c FROM carrapPulga c WHERE c.data = :data")
-    Optional<CarrapatoPulga> findByDosagemData(@Param("data") LocalDate data);
+    Optional<Carrapaticida> findByDosagemData(@Param("data") LocalDate data);
 
 }

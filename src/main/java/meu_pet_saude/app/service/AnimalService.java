@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.model.Animal;
+import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
+import meu_pet_saude.app.repository.CarrapaticidaRepository;
 import meu_pet_saude.app.repository.TutorRepository;
 import meu_pet_saude.app.repository.VacinaRepository;
 import meu_pet_saude.app.repository.VermifugacaoRepository;
@@ -49,8 +51,8 @@ public class AnimalService {
         return null;
     }
 
-    public Vermifugacao adicionarVermifugoListaAnimal(Long id, Vermifugacao vermifugacao) {
-        Optional<Animal> animOptional = animalRepository.findById(id);
+    public Vermifugacao adicionarVermifugoListaAnimal(Long idAnimal, Vermifugacao vermifugacao) {
+        Optional<Animal> animOptional = animalRepository.findById(idAnimal);
 
         if (animOptional.isPresent()) {
             Animal animal = animOptional.get();
@@ -60,6 +62,22 @@ public class AnimalService {
             animalRepository.save(animal);
 
             return vermifugacao;
+        }
+        return null;
+    }
+
+
+    public Carrapaticida adicionarCarrapaticidaListaAnimal(Long idAnimal, Carrapaticida carrapaticida) {
+        Optional<Animal> animalOptional = animalRepository.findById(idAnimal);
+
+        if (animalOptional.isPresent()) {
+            Animal animal = animalOptional.get();
+
+            animal.getCarrapaticidas().add(carrapaticida);
+            carrapaticidaRepository.save(carrapaticida);
+            animalRepository.save(animal);
+        
+            return carrapaticida;
         }
         return null;
     }
@@ -129,5 +147,8 @@ public class AnimalService {
 
     @Autowired 
     private VermifugacaoRepository vermifugacaoRepository;
+
+    @Autowired
+    private CarrapaticidaRepository carrapaticidaRepository;
 
 }

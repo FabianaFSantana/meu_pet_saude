@@ -28,7 +28,8 @@ public class VermifugacaoService {
         if (animOptional.isPresent()) {
             Animal animalEncont = animOptional.get();
 
-            return animalEncont.getVermifugos();
+            List<Vermifugacao> vermifugos =  animalEncont.getVermifugos();
+            return vermifugos;
         } else {
             return Collections.emptyList();
         }
