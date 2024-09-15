@@ -67,8 +67,9 @@ O projeto é estruturado da seguinte forma:
 * `com.meu_pet_saude.api.controller`: Controladores para manipular as requisições HTTP.
 * `com.meu_pet_saude.api.model`: Modelos de dados para representar Tutor, ViaCepEndereco, Animal, Vacina, CarrapatoPulga (carrapaticidas), Vermifugacao e Consulta.
 * `com.meu_pet_saude.api.repository`: Repositórios para interação com o banco de dados.
-* `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Email (para enviar lembretes para os tutores), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
+* `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
 * `com.meu_pet_saude.api.security`: Filtro e Configuração para permitir ou não o acesso à API.
+* `com.meu_pet_saude.api.scheduler`: Agendador para enviar mensagem de aniversário para o tutor.
 
 ## Uso da API
 A API possui os seguintes endpoints:
