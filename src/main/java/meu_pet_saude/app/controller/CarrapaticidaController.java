@@ -39,22 +39,6 @@ public class CarrapaticidaController {
     public ResponseEntity<String> excluirMedicacao(@PathVariable("animal_id") Long idAnimal, @PathVariable("carrap_id") Long idCarrapaticida) {
         return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.excluirCarrapaticida(idAnimal, idCarrapaticida));
     }
-
-
-/*     @PostMapping("/{idTutor}/enviarLembreteDeCarrapaticidaPorEmail/{proximaDose}")
-    public ResponseEntity<String> enviarLembreteCarrapaticidaEmail(@PathVariable("idTutor") Long idTutor,
-    @PathVariable("proximaDose") LocalDate proximaDose) {
-
-        carrapatoPulgaService.exibirListaDeCarrapaticidasProximaDose(idTutor, proximaDose);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Lembrete de carrapaticida enviado com sucesso.");
-    }
-
-
-    
-
-  
-    } */
     
     @Autowired
     private CarrapaticidaService carrapaticidaService;

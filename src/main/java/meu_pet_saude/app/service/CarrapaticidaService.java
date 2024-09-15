@@ -12,7 +12,6 @@ import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.CarrapaticidaRepository;
-import meu_pet_saude.app.repository.TutorRepository;
 
 @Service
 public class CarrapaticidaService {
@@ -86,10 +85,5 @@ public class CarrapaticidaService {
     @Autowired 
     private CarrapaticidaRepository carrapaticidaRepository;
 
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private TutorRepository tutorRepository;
     
 }

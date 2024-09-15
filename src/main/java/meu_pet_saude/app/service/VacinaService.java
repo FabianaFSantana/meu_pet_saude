@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.repository.AnimalRepository;
-import meu_pet_saude.app.repository.TutorRepository;
 import meu_pet_saude.app.repository.VacinaRepository;
 
 @Service
@@ -78,33 +77,7 @@ public class VacinaService {
         List<Vacina> vacinas = animal.getVacinas();
         return vacinas;
     }
-
-    /* public List<Vacina> enviarLemreteDeDoseDeReforcoVacinaPorEmail(Long idTutor, LocalDate dataDaProximaDose) {
-
-        Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
-        List<Vacina> vacinasHoje = new ArrayList<>();
-    
-        if (tutorOptional.isPresent()) {
-            Tutor tutorEncontrado = tutorOptional.get();
-            List<Animal> animais = tutorEncontrado.getAnimais();
-    
-            for (Animal animal : animais) {
-                if (!animal.getVacinas().isEmpty()) {
-                    List<Vacina> vacinas = animal.getVacinas();
-                    for (Vacina vacina : vacinas) {
-                        if (vacina.getDataDaProximaDose().equals(dataDaProximaDose)) {
-                            vacinasHoje.add(vacina);
-                        }
-                    }
-                    for (Vacina vacina : vacinasHoje) {
-                        emailService.enviarEmailDeRefocoDeVacina(tutorEncontrado, vacina, animal);
-                    }
-                }
-            }
-        }
-        return vacinasHoje;
-    } */
-    
+   
 
     @Autowired
     private AnimalRepository animalRepository;
@@ -112,9 +85,5 @@ public class VacinaService {
     @Autowired
     private VacinaRepository vacinaRepository;
 
-    @Autowired
-    private TutorRepository tutorRepository;
 
-    @Autowired
-    private EmailService emailService;
 }
