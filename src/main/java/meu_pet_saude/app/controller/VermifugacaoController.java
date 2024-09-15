@@ -1,8 +1,5 @@
 package meu_pet_saude.app.controller;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.model.Vermifugacao;
-import meu_pet_saude.app.repository.AnimalRepository;
-import meu_pet_saude.app.repository.VermifugacaoRepository;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.VermifugacaoService;
 
@@ -29,11 +24,6 @@ public class VermifugacaoController {
     @PostMapping("/{animal_id}")
     public ResponseEntity<Vermifugacao> cadastrarVermifugacao(@PathVariable("animal_id") Long idAnimal, @RequestBody Vermifugacao vermifugacao) {
         return ResponseEntity.status(HttpStatus.CREATED).body(animalService.adicionarVermifugoListaAnimal(idAnimal, vermifugacao));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Vermifugacao>> exibirListaDeTodosVermifugos() {
-        return ResponseEntity.status(HttpStatus.OK).body(vermifugacaoService.buscarVermifugos());
     }
 
     @GetMapping("/{verm_id}")

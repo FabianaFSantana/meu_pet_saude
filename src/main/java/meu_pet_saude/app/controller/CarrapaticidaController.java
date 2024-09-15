@@ -1,9 +1,5 @@
 package meu_pet_saude.app.controller;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +16,7 @@ import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.CarrapaticidaService;
 
 @RestController
-@RequestMapping("/carrapatoPulga")
+@RequestMapping("/carrapaticida")
 public class CarrapaticidaController {
 
     @PostMapping("/{animal_id}")
@@ -33,6 +29,16 @@ public class CarrapaticidaController {
         return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.buscarCarrapaticidaPeloId(idCarrap));
     }
 
+    @PutMapping("/{carrap_id}")
+    public ResponseEntity<Carrapaticida> atualizarDadosMedicacao(@PathVariable("carrap_id") Long idCarrapaticida,@RequestBody Carrapaticida carrapatoPulga) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.atualizarDadosCarrapaticida(idCarrapaticida, carrapatoPulga));    
+    }
+        
+    @DeleteMapping("/{animal_id/ecluirCarrapaticida/{carrap_id}")
+    public ResponseEntity<String> excluirMedicacao(@PathVariable("animal_id") Long idAnimal, @PathVariable("carrap_id") Long idCarrapaticida) {
+        return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.excluirCarrapaticida(idAnimal, idCarrapaticida));
+    }
 
 
 /*     @PostMapping("/{idTutor}/enviarLembreteDeCarrapaticidaPorEmail/{proximaDose}")
@@ -44,58 +50,10 @@ public class CarrapaticidaController {
         .body("Lembrete de carrapaticida enviado com sucesso.");
     }
 
-    @GetMapping
-    public ResponseEntity<List<Carrapaticida>> listarDosagensDadas() {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(carrapatoPulgaRepository.findAll());
-    }
 
-    @GetMapping("/{idCarrap}")
-    public ResponseEntity<Optional<Carrapaticida>> localizarDosagemPeloId(@PathVariable("idCarrap") Long idCarrap) {
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(carrapatoPulgaRepository.findById(idCarrap));
-    }
+    
 
-    @GetMapping("/data/{data}")
-    public ResponseEntity<Carrapaticida> buscarDosagemPorData(@PathVariable("data") LocalDate data) {
-       Optional<Carrapaticida> carrapOptional = carrapatoPulgaRepository.findByDosagemData(data);
-
-       if (carrapOptional.isPresent()) {
-        Carrapaticida carrap = carrapOptional.get();
-        return ResponseEntity.status(HttpStatus.OK)
-        .body(carrap);
-        
-       } else {
-        return ResponseEntity.notFound().build();
-       }
-    }
-
-    @PutMapping("/{idCarrap}")
-    public ResponseEntity<Carrapaticida> atualizarDadosMedicacao(@PathVariable("idCarrap") Long idCarrap,
-    @RequestBody Carrapaticida carrapatoPulga) {
-        Optional<Carrapaticida> carrapOptional = carrapatoPulgaRepository.findById(idCarrap);
-
-        if (carrapOptional.isPresent()) {
-            Carrapaticida carrapEncontrado = carrapOptional.get();
-
-            carrapEncontrado.setNomeMedic(carrapatoPulga.getNomeMedic());
-            carrapEncontrado.setPeso(carrapatoPulga.getPeso());
-            carrapEncontrado.setDosagem(carrapatoPulga.getDosagem());
-            carrapEncontrado.setData(carrapatoPulga.getData());
-            carrapEncontrado.setProximaDose(carrapatoPulga.getProximaDose());
-
-            return ResponseEntity.status(HttpStatus.OK)
-            .body(carrapatoPulgaRepository.save(carrapEncontrado));
-            
-        }
-        return ResponseEntity.notFound().build();
-    }
-
-    @DeleteMapping("/{idCarrap}")
-    public ResponseEntity<String> excluirMedicacao(@PathVariable("idCarrap") Long idCarrap) {
-        carrapatoPulgaRepository.deleteById(idCarrap);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Medicação excluída com sucesso");
+  
     } */
     
     @Autowired

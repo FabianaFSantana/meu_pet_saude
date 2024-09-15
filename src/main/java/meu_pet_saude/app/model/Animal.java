@@ -56,16 +56,16 @@ public class Animal {
     private String corDoPelo;
 
     @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true )
-    @JoinColumn(name = "vacina_id")
+    @JoinColumn(name = "animal_id")
     private List<Vacina> vacinas;
 
     @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "vermifugo_id")
+    @JoinColumn(name = "animal_id")
     private List<Vermifugacao> vermifugos;
 
     @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
-    @JoinColumn(name = "carrapaticida_id")
-    private List<CarrapatoPulga> carrapaticidas;
+    @JoinColumn(name = "animal_id")
+    private List<Carrapaticida> carrapaticidas;
 
     @OneToMany
     private List<Consulta> consultas;
@@ -79,7 +79,7 @@ public class Animal {
         this.vermifugos.add(vermifugacao);
     }
 
-    public void addCarrapaticida(CarrapatoPulga carrapaticida) {
+    public void addCarrapaticida(Carrapaticida carrapaticida) {
         this.carrapaticidas.add(carrapaticida);
     }
 

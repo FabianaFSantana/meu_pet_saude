@@ -57,7 +57,7 @@ public class AnimalService {
         if (animOptional.isPresent()) {
             Animal animal = animOptional.get();
 
-            animal.getVermifugos().add(vermifugacao);
+            animal.addVermifugo(vermifugacao);
             vermifugacaoRepository.save(vermifugacao);
             animalRepository.save(animal);
 
@@ -73,7 +73,7 @@ public class AnimalService {
         if (animalOptional.isPresent()) {
             Animal animal = animalOptional.get();
 
-            animal.getCarrapaticidas().add(carrapaticida);
+            animal.addCarrapaticida(carrapaticida);
             carrapaticidaRepository.save(carrapaticida);
             animalRepository.save(animal);
         

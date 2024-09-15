@@ -68,16 +68,19 @@ public class TutorService {
             tutorEncontrado.setDataDeNascimento(tutor.getDataDeNascimento());
             tutorEncontrado.setTelefone(tutor.getTelefone());
             tutorEncontrado.setEmail(tutor.getEmail());
-            tutorEncontrado.getEndereco().setCep(tutor.getEndereco().getCep());
-            tutorEncontrado.getEndereco().setLogradouro(tutor.getEndereco().getLogradouro());
-            tutorEncontrado.getEndereco().setNumero(tutor.getEndereco().getNumero());
-            tutorEncontrado.getEndereco().setComplemento(tutor.getEndereco().getComplemento());
-            tutorEncontrado.getEndereco().setBairro(tutor.getEndereco().getBairro());
-            tutorEncontrado.getEndereco().setCidade(tutor.getEndereco().getCidade());
-            tutorEncontrado.getEndereco().setUf(tutor.getEndereco().getUf());
+            
+            Endereco endereco = tutorEncontrado.getEndereco();
+            EnderecoDTO enderecoDTO = viaCepEnderecoService.buscarEnderecoPeloCep(tutor.getEndereco().getCep());
+
+            endereco.setCep(enderecoDTO.getCep());
+            endereco.setBairro(enderecoDTO.getBairro());
+            endereco.setCidade(enderecoDTO.getLocalidade());
+            endereco.setLogradouro(enderecoDTO.getLogradouro());
+            endereco.setUf(enderecoDTO.getUf());
+            endereco.setNumero(tutor.getEndereco().getNumero());
+            endereco.setComplemento(tutor.getEndereco().getComplemento());
            
             return tutorRepository.save(tutorEncontrado);
-            
         }
         return null;
     }

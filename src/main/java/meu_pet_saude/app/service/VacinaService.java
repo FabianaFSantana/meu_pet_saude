@@ -1,7 +1,5 @@
 package meu_pet_saude.app.service;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.model.Animal;
-import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.TutorRepository;
@@ -20,10 +17,7 @@ import meu_pet_saude.app.repository.VacinaRepository;
 @Service
 public class VacinaService {
 
-    public List<Vacina> exibirVacinasCadastradas() {
-        return vacinaRepository.findAll();
-    }
-
+   
     public Vacina buscarVacinaPorId(Long id) {
         Optional<Vacina> vacinaOptional = vacinaRepository.findById(id);
 
@@ -42,8 +36,7 @@ public class VacinaService {
             Vacina vacEncontrada = vacOptional.get();
 
             vacEncontrada.setNomeVacina(vacina.getNomeVacina());
-            vacEncontrada.setDataDaUltimaDose(vacina.getDataDaUltimaDose());
-            vacEncontrada.setDataDaProximaDose(vacina.getDataDaProximaDose());
+            vacEncontrada.setData(vacina.getData());
             vacEncontrada.setNomeDaClinica(vacina.getNomeDaClinica());
             vacEncontrada.setNomeVeterinario(vacina.getNomeVeterinario());
 
@@ -86,7 +79,7 @@ public class VacinaService {
         return vacinas;
     }
 
-    public List<Vacina> enviarLemreteDeDoseDeReforcoVacinaPorEmail(Long idTutor, LocalDate dataDaProximaDose) {
+    /* public List<Vacina> enviarLemreteDeDoseDeReforcoVacinaPorEmail(Long idTutor, LocalDate dataDaProximaDose) {
 
         Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
         List<Vacina> vacinasHoje = new ArrayList<>();
@@ -110,7 +103,8 @@ public class VacinaService {
             }
         }
         return vacinasHoje;
-    }
+    } */
+    
 
     @Autowired
     private AnimalRepository animalRepository;

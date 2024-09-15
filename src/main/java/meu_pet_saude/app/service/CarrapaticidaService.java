@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
 import meu_pet_saude.app.model.Animal;
@@ -42,7 +43,51 @@ public class CarrapaticidaService {
         }
     }
 
-    public void removerCarrapaticidaDaLista(Long idAnimal, Long idCarrap) {
+    public Carrapaticida atualizarDadosCarrapaticida(Long idCarrapaticida, Carrapaticida carrapaticida) {
+        Optional<Carrapaticida> carrapOptional = carrapaticidaRepository.findById(idCarrapaticida);
+
+        if (carrapOptional.isPresent()) {
+            Carrapaticida carrapEncontrado = carrapOptional.get();
+
+            carrapEncontrado.setData(carrapaticida.getData());
+            carrapEncontrado.setDosagem(carrapaticida.getDosagem());
+            carrapEncontrado.setNomeMedicamento(carrapaticida.getNomeMedicamento());
+            carrapEncontrado.setPeso(carrapaticida.getPeso());
+
+            carrapaticidaRepository.save(carrapEncontrado);
+            return carrapEncontrado;
+        }
+        return null;
+    }
+
+    @Transactional
+    public String excluirCarrapaticida(Long idAnimal, Long idCarrapaticida) {
+
+        Animal animal = animalRepository.findById(idAnimal).orElse(null);
+        Carrapaticida carrapaticida = carrapaticidaRepository.findById(idCarrapaticida).orElse(null);
+
+        if (animal == null) {
+            return "Animal não encontrado";
+        }
+
+        if (carrapaticida == null) {
+            return "Carrapaticida não encontrado!";
+        }
+
+        List<Carrapaticida> carrapaticidas = animal.getCarrapaticidas();
+        if (carrapaticidas.remove(carrapaticida)) {
+            animalRepository.save(animal);
+            carrapaticidaRepository.deleteById(idCarrapaticida);
+            return "Carrapaticida excluído com sucesso!";
+        }
+        return "Carrapaticida não encontrado na lista do animal.";
+
+    }
+
+    
+
+/* 
+  public void removerCarrapaticidaDaLista(Long idAnimal, Long idCarrap) {
         
         Optional<Animal> animOptional = animalRepository.findById(idAnimal);
         if (animOptional.isPresent()) {
@@ -91,6 +136,8 @@ public class CarrapaticidaService {
         }
         return carrapaticidasHoje;
     }
+*/
+    
 
     @Autowired
     private AnimalRepository animalRepository;

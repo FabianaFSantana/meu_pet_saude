@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "vermifugacao")
+@Entity(name = "tb_vermifugacao")
 public class Vermifugacao {
 
     @Id
@@ -36,7 +36,4 @@ public class Vermifugacao {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data;
 
-    @Column(nullable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate proximaDose;
 }

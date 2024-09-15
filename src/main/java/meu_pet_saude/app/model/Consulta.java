@@ -47,6 +47,6 @@ public class Consulta {
     @Column(nullable = false)
     private String medicacao;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String posologia;
 }
