@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "vacina")
+@Entity(name = "tb_vacinas")
 
 public class Vacina {
 
@@ -29,11 +29,7 @@ public class Vacina {
 
     @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataDaUltimaDose;
-
-    @Column(nullable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataDaProximaDose;
+    private LocalDate data;
 
     @Column(nullable = false)
     private String nomeDaClinica;

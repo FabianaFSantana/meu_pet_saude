@@ -1,7 +1,6 @@
 package meu_pet_saude.app.controller;
 
-import java.time.LocalDate;
-import java.util.List;
+//import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,18 +31,13 @@ public class VacinaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novaVacina);
     }
 
-    @PostMapping("/{idTutor}/enviarLembretePorEmail/{dataDaProximaDose}") 
+    /*@PostMapping("/{idTutor}/enviarLembretePorEmail/{dataDaProximaDose}") 
     public ResponseEntity<String> enviarEmail(@PathVariable("idTutor") Long idTutor, 
     @PathVariable("dataDaProximaDose") LocalDate dataDaProximaDose) {
         vacinaService.enviarLemreteDeDoseDeReforcoVacinaPorEmail(idTutor, dataDaProximaDose);
         return ResponseEntity.status(HttpStatus.OK)
         .body("Lembrete de vacina enviado para o email.");
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Vacina>> exibirVacinas() {
-        return ResponseEntity.status(HttpStatus.OK).body(vacinaService.exibirVacinasCadastradas());
-    }
+    }*/
 
     @GetMapping("/{vacina_id}")
     public ResponseEntity<Vacina> exibirVacinaPeloId(@PathVariable("vacina_id") Long idVacina) {

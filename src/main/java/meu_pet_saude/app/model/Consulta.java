@@ -17,7 +17,7 @@ import meu_pet_saude.app.constant.TipoDeConsulta;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "consulta")
+@Entity(name = "tb_consultas")
 
 public class Consulta {
     
@@ -25,8 +25,8 @@ public class Consulta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idConsulta;
 
-    @Column(nullable = false)
-    private String clinica;
+   @Column(nullable = false)
+    private String nomeDaClinica;
 
     @Column(nullable = false)
     private String veterinario;
@@ -36,17 +36,16 @@ public class Consulta {
 
     @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate data;
+    private LocalDate dataDaConsulta;
 
     @Column(nullable = false)
     private String sintomas;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String diagnostico;
 
-    @Column(nullable = false)
     private String medicacao;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String posologia;
 }

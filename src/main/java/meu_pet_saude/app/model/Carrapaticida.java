@@ -16,15 +16,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "carrapPulga")
-public class CarrapatoPulga {
+@Entity(name = "tb_carrapaticidas")
+public class Carrapaticida {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idCarrap;
+    private long idCarrapaticida;
 
     @Column(nullable = false)
-    private String nomeMedic;
+    private String nomeMedicamento;
 
     @Column(nullable = false)
     private double peso;
@@ -36,8 +36,5 @@ public class CarrapatoPulga {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data;
 
-    @Column(nullable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate proximaDose;
     
 }
