@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import meu_pet_saude.app.dto.EnderecoDTO;
@@ -17,6 +18,13 @@ import meu_pet_saude.app.repository.TutorRepository;
 public class TutorService {
     
     public Tutor salvarTutor(Tutor tutor) {
+        String senha = tutor.getSenha();
+
+        BCryptPasswordEncoder encoder = autentificacaoService.getPasswordEncoder();
+
+        String senhaCriptografada = encoder.encode(senha);
+
+        tutor.setSenha(senhaCriptografada);
 
         Endereco endereco = tutor.getEndereco();
         EnderecoDTO enderecoDTO = viaCepEnderecoService.buscarEnderecoPeloCep(tutor.getEndereco().getCep());
@@ -27,6 +35,16 @@ public class TutorService {
         endereco.setUf(enderecoDTO.getUf());
 
         return tutorRepository.save(tutor);
+    }
+
+    public Tutor buscaTutorPeloEmail(String email) {
+        Optional<Tutor> tutorOptional = tutorRepository.findByEmail(email);
+
+        if (tutorOptional.isPresent()) {
+            Tutor tutor = tutorOptional.get();
+            return tutor;
+        }
+        return null;
     }
 
     public Animal adicionarAnimalNaListaDeTutor(Long id, Animal animal) {
@@ -98,4 +116,7 @@ public class TutorService {
 
     @Autowired
     private AnimalRepository animalRepository;
+
+    @Autowired
+    private AutentificacaoService autentificacaoService;
 }
