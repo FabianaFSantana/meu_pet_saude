@@ -35,7 +35,7 @@ public class CarrapaticidaController {
         return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.atualizarDadosCarrapaticida(idCarrapaticida, carrapatoPulga));    
     }
         
-    @DeleteMapping("/{animal_id/ecluirCarrapaticida/{carrap_id}")
+    @DeleteMapping("/{animal_id}/ecluirCarrapaticida/{carrap_id}")
     public ResponseEntity<String> excluirMedicacao(@PathVariable("animal_id") Long idAnimal, @PathVariable("carrap_id") Long idCarrapaticida) {
         return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.excluirCarrapaticida(idAnimal, idCarrapaticida));
     }

@@ -67,7 +67,8 @@ public class Animal {
     @JoinColumn(name = "animal_id")
     private List<Carrapaticida> carrapaticidas;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
+    @JoinColumn(name = "animal_id")
     private List<Consulta> consultas;
     
     
@@ -81,6 +82,10 @@ public class Animal {
 
     public void addCarrapaticida(Carrapaticida carrapaticida) {
         this.carrapaticidas.add(carrapaticida);
+    }
+
+    public void addConsulta(Consulta consulta) {
+        this.consultas.add(consulta);
     }
 
 

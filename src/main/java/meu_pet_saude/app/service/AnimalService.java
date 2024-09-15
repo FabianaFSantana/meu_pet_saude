@@ -10,11 +10,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Carrapaticida;
+import meu_pet_saude.app.model.Consulta;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.CarrapaticidaRepository;
+import meu_pet_saude.app.repository.ConsultaRepository;
 import meu_pet_saude.app.repository.TutorRepository;
 import meu_pet_saude.app.repository.VacinaRepository;
 import meu_pet_saude.app.repository.VermifugacaoRepository;
@@ -78,6 +80,21 @@ public class AnimalService {
             animalRepository.save(animal);
         
             return carrapaticida;
+        }
+        return null;
+    }
+
+    public Consulta adicionarConsultaListaAnimal(Long idAnimal, Consulta consulta) {
+        Optional<Animal> animalOptional = animalRepository.findById(idAnimal);
+
+        if (animalOptional.isPresent()) {
+            Animal animal = animalOptional.get();
+            
+            animal.addConsulta(consulta);
+            consultaRepository.save(consulta);
+            animalRepository.save(animal);
+
+            return consulta;
         }
         return null;
     }
@@ -150,5 +167,8 @@ public class AnimalService {
 
     @Autowired
     private CarrapaticidaRepository carrapaticidaRepository;
+
+    @Autowired
+    private ConsultaRepository consultaRepository;
 
 }

@@ -36,14 +36,6 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
     }
 
-    @PostMapping("/{idAnimal}/adicionarConsultaListaAnimal/{idConsulta}")
-    public ResponseEntity<String> adicionarConsultaNaLista(@PathVariable("idAnimal") Long idAnimal,
-    @PathVariable("idConsulta") Long idConsulta) {
-        consultaService.adicionarConsultaNaLista(idAnimal, idConsulta);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Consulta adicionada à lista.");
-    }
-
     @GetMapping
     public ResponseEntity<List<Animal>> exibirListaDeAnimais() {
         return ResponseEntity.status(HttpStatus.OK).body(animalService.exibirListaDeAnimais());
@@ -71,8 +63,7 @@ public class AnimalController {
 
     @GetMapping("/exibirListaDeConsultas/{idAnimal}")
     public ResponseEntity<List<Consulta>> exibirListaConsultas(@PathVariable("idAnimal") Long idAnimal){
-        List<Consulta> consultas = consultaService.exibirConsultas(idAnimal);
-        return ResponseEntity.status(HttpStatus.OK).body(consultas);
+        return ResponseEntity.status(HttpStatus.OK).body(consultaService.exibirConsultas(idAnimal));
     }
 
     @PutMapping("/{animal_id}")
