@@ -51,7 +51,7 @@ public class ConsultaController {
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.atualizarDadosDaConsulta(idConsulta, consulta));
     }
 
-    @DeleteMapping("/{animal_id/excluir/{consulta_id}")
+    @DeleteMapping("/{animal_id}/excluir/{consulta_id}")
     public ResponseEntity<String> excluirConsulta(@PathVariable("animal_id") Long idAnimal, @PathVariable("idConsulta") Long idConsulta) {
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.removerConsultaDaLista(idAnimal, idConsulta));
     }

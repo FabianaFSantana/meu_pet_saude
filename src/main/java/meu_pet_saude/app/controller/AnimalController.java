@@ -76,13 +76,6 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.OK).body(animalService.excluirAnimal(id, idAnimal));
     }
 
-    /*@DeleteMapping("/{idAnimal}/removerConsultaListaAnimal/{idConsulta}")
-    public ResponseEntity<String> removerConsultaLista(@PathVariable("idAnimal") Long idAnimal,
-    @PathVariable("idConsulta") Long idConsulta) {
-        consultaService.removerConsultaDaLista(idAnimal, idConsulta);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Consulta removida da lista do animal.");
-    }*/
 
     @Autowired
     private TutorService tutorService;
