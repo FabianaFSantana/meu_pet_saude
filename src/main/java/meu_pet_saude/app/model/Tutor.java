@@ -21,6 +21,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import meu_pet_saude.app.dto.TutorDTO;
 
 @Data
 @AllArgsConstructor
@@ -66,6 +67,19 @@ public class Tutor implements UserDetails{
 
     public void addAnimal(Animal animal) {
         this.animais.add(animal);
+    }
+
+    public TutorDTO converterTutorDTO() {
+        TutorDTO dto = new TutorDTO();
+
+        dto.setNome(nome);
+        dto.setEmail(email);
+        dto.setTelefone(telefone);
+        dto.setAdministrador(administrador);
+        dto.setUsuarioExterno(usuarioExterno);
+        dto.setToken(null);
+
+        return dto;
     }
 
 

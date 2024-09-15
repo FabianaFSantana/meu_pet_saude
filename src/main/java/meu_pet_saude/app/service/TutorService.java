@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import meu_pet_saude.app.dto.EnderecoDTO;
+import meu_pet_saude.app.dto.TutorDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Endereco;
 import meu_pet_saude.app.model.Tutor;
@@ -66,12 +67,12 @@ public class TutorService {
         return tutorRepository.findAll();
     }
 
-    public Tutor buscarTutorPeloId(Long id) {
+    public TutorDTO buscarTutorPeloId(Long id) {
         Optional<Tutor> tutorOptional = tutorRepository.findById(id);
 
         if (tutorOptional.isPresent()) {
             Tutor tutor = tutorOptional.get();
-            return tutor;
+            return tutor.converterTutorDTO();
         }
         return null;
     }
