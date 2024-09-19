@@ -12,5 +12,7 @@ import java.time.LocalDate;
 @Repository
 public interface VacinaRepository extends JpaRepository<Vacina, Long> {
     
+    
     List<Vacina> findByData(LocalDate data);
+
 }

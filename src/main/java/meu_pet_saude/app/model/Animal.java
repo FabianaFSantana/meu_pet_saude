@@ -14,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -54,6 +55,10 @@ public class Animal {
 
     @Column(nullable = false)
     private String corDoPelo;
+
+    @ManyToOne
+    @JoinColumn(name = "tutor_id")
+    private Tutor tutor;
 
     @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true )
     @JoinColumn(name = "animal_id")
