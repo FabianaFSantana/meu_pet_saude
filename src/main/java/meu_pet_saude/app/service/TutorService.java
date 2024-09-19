@@ -84,7 +84,7 @@ public class TutorService {
             Tutor tutorEncontrado = tutorOptional.get();
 
             tutorEncontrado.setNome(tutor.getNome());
-            tutorEncontrado.setDataDeNascimento(tutor.getDataDeNascimento());
+            tutorEncontrado.setDataNascimento(tutor.getDataNascimento());
             tutorEncontrado.setTelefone(tutor.getTelefone());
             tutorEncontrado.setEmail(tutor.getEmail());
             

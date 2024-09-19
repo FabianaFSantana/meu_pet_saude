@@ -36,7 +36,7 @@ public class Tutor implements UserDetails{
 
     @Column(nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dataDeNascimento;
+    private LocalDate dataNascimento;
 
     @Column(nullable = false)
     private String telefone;
