@@ -1,6 +1,7 @@
 package meu_pet_saude.app.scheduler;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,42 +12,51 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import meu_pet_saude.app.model.Tutor;
-import meu_pet_saude.app.repository.TutorRepository;
+import meu_pet_saude.app.model.Vacina;
+import meu_pet_saude.app.repository.VacinaRepository;
 
 @Component
 @EnableScheduling
-public class AniversarioTutorScheduler {
-    
-    @Scheduled(cron = CRON_EXPRESSION, zone = TIME_ZONE)
-    public void enviarNotificacao() {
-    
-        LocalDate hoje = LocalDate.now();
+public class VacinaScheduler {
 
-        tutorRepository.findByDiaMesNascimento(hoje.getDayOfMonth(), hoje.getMonthValue()).forEach(tutor -> enviarEmail(tutor));
+    @Scheduled(cron = CRON_EXPRESSION, zone = TIME_ZONE)
+    public void enviarNotificacaoVacina() {
+
+        LocalDate hoje = LocalDate.now();
+        LocalDate umAnoAtras = hoje.minusYears(1);
+
+        List<Vacina> vacinasParaReforco = vacinaRepository.findByData(umAnoAtras);
+
+        for (Vacina vacina : vacinasParaReforco) {
+            enviarEmailVacina(vacina);
+        }
+        
     }
 
-    public void enviarEmail(Tutor tutor) {
+    public void enviarEmailVacina(Vacina vacina) {
+
+        Tutor tutor = vacina.getAnimal().getTutor();
+        
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setSubject("Uma mensagem para você!");
+        email.setSubject("Lembrete de Vacina!");
         email.setFrom(EMAIL_SENDER);
         email.setTo(tutor.getEmail());
-        email.setText("Feliz aniversário, " + tutor.getNome() + "!");
+        email.setText("Hoje é dia de " + vacina.getAnimal().getNome() + " tomar a dose de reforço da " + vacina.getNomeVacina());
 
         javaMailSender.send(email);
     }
 
-    private final String CRON_EXPRESSION = "0 09 10 * * *"; //para determinar o horário
+    private final String CRON_EXPRESSION = "0 0 17 * * *";
 
-    private final String TIME_ZONE = "America/Sao_Paulo";//para determinar o fuso
+    private final String TIME_ZONE = "America/Sao_Paulo";
 
     @Value("${spring.mail.sender}")
     private String EMAIL_SENDER;
 
-    @Autowired 
-    private TutorRepository tutorRepository;
+    @Autowired
+    private VacinaRepository vacinaRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
-
-}
     
+}
