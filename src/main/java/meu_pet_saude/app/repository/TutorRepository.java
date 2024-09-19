@@ -14,6 +14,7 @@ public interface TutorRepository extends JpaRepository<Tutor, Long> {
     
     Optional<Tutor> findByEmail(String email);
 
-    @Query("SELECT c FROM tutor c WHERE DAY(c.dataNascimento) = ?1 AND MONTH(c.dataNascimento) = ?2")
+    @Query(value = "SELECT * FROM tutor WHERE DAY(data_nascimento) = ?1 AND MONTH(data_nascimento) = ?2", nativeQuery = true)
     List<Tutor> findByDiaMesNascimento(int dia, int mes);
+    
 }

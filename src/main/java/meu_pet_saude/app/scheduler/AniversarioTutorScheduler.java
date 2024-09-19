@@ -35,7 +35,7 @@ public class AniversarioTutorScheduler {
         javaMailSender.send(email);
     }
 
-    private final String CRON_EXPRESSION = "0 0 0 * * *"; //para determinar o horário
+    private final String CRON_EXPRESSION = "0 53 9 * * *"; //para determinar o horário
 
     private final String TIME_ZONE = "America/Sao_Paulo";//para determinar o fuso
 
@@ -49,3 +49,4 @@ public class AniversarioTutorScheduler {
     private JavaMailSender javaMailSender;
 
 }
+    
