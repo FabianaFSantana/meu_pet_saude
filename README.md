@@ -8,7 +8,7 @@ Api Rest para desenvolvimento de um app de caderneta de saúde Pet.
 </div>
 
 ## Descrição do Projeto
-O Meu Pet Saúde é uma API REST desenvolvida com Spring Boot para servir como backend de uma aplicação controle veterinário para cães e gatos de estimação. Ele oferece recursos para manipulação de tutores, pets, controle de vacinas, vermifugação, atiparasitários e consultas verterinárias, assim como envio por email de lembretes para doses de reforço para os tutores, proporcionando uma interface para interação com o banco de dados MySQL.
+O Meu Pet Saúde é uma API REST desenvolvida com Spring Boot para servir como backend de uma aplicação controle veterinário para cães e gatos de estimação. Ele oferece recursos para manipulação de tutores, pets, controle de vacinas, vermifugação, atiparasitários e consultas verterinárias, assim como envio por email de mensagem de aniversário para os tutores, proporcionando uma interface para interação com o banco de dados MySQL. Fonerce segurança através de criação e autenticação de token pelo Spring Security para possibilitar a segurança do usuário.
 
 ## Configuração do Ambiente
 
@@ -51,6 +51,10 @@ spring.mail.username=USERNAME
 spring.mail.password=PASSWORD
 spring.mail.properties.mail.smtp.auth=AUTH
 ```
+Acrescente sua chave e seu token para ativar e configurar o Spring Security.
+```
+spring.security.secret-key=SUA_CHAVE
+spring.security.token-issuer=SEU_TOKEN-ISSUER
 5. Execute a aplicação:
 ```
 mvn spring-boot:run
@@ -63,71 +67,60 @@ O projeto é estruturado da seguinte forma:
 * `com.meu_pet_saude.api.controller`: Controladores para manipular as requisições HTTP.
 * `com.meu_pet_saude.api.model`: Modelos de dados para representar Tutor, ViaCepEndereco, Animal, Vacina, CarrapatoPulga (carrapaticidas), Vermifugacao e Consulta.
 * `com.meu_pet_saude.api.repository`: Repositórios para interação com o banco de dados.
-* `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Email (para enviar lembretes para os tutores), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
+* `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
+* `com.meu_pet_saude.api.security`: Filtro e Configuração para permitir ou não o acesso à API.
+* `com.meu_pet_saude.api.scheduler`: Agendador para enviar mensagem de aniversário para o tutor.
 
 ## Uso da API
 A API possui os seguintes endpoints:
 
+### Autenticacao:
+*`POST /login`: Permite o acesso do usuário à API por meio de email e senha.
+
 ### Tutor:
-* `POST /tutor`: Cria um novo tutor.
-* `POST /tutor/{idTutor}/adicionarAnimalNaLista/{idAnimal}`: Adciona um animal cadastrado a uma lista de animais do tutor.
+* `POST /tutor`: Cadastra um novo tutor.
 * `GET /tutor`: Lista todos os tutores.
 * `GET /tutor/{id}`: Obtém informações de um tutor específico.
 * `GET /tutor/exibirListaDeAnimaisTutor/{idTutor}`: Exibe lista dos animais do tutor.
 * `PUT /tutor/{id}`: Atualiza as informações de um tutor.
 * `DELETE /tutor/{id}`: Exclui um tutor.
-* `DELETE /tutor/{idTutor}/removerAnimalDaLista/{idAnimal}`: Remove um animal da lista de animais do tutor.
 
-### Animais:
-* `POST /animal`: Cria um novo animal.
-* `POST /animal/{idAnimal}/adicionarVacinaListaAnimal/{idVacina}`: Relaciona vacina ao animal.
-* `POST /animal/{idAnimal}/adicionarVermifugoListaAnimal/{idVerm}`: Relaciona vermífugo ao animal.
-* `POST /animal/{idAnimal}/adicionarCarrapListaAnimal/{idCarrap}`: Relaciona carrapticida ao animal.
-* `POST /animal/{idAnimal}/adicionarConsultaListaAnimal/{idConsulta}`: Relaciona consulta ao animal.
+### Animal:
+* `POST /animal/{tutor_id}`: Cria um novo animal e o adiciona à lista de animais do tutor.
 * `GET /animal`: Lista todos os animais.
-* `GET /animal/{idAnimal}`: Obtém informações de um animal específico.
-* `GET /animal/exibirListaDeVacinas/{idAnimal}`: Exibe lista de vacinas de um animal específico.
-* `GET /animal//exibirListaDeVermifugos/{idAnimal}`: Exibe lista de vermífugos de um animal específico.
-* `GET /animal/exibirListaDeCarrapaticidas/{idAnimal}`: Exibe lista de carrapaticidas de um animal específico.
+* `GET /animal/{animal_id}`: Obtém informações de um animal específico.
+* `GET /animal/exibirListaDeVacinas/{animal_id}`: Exibe lista de vacinas de um animal específico.
+* `GET /animal/exibirListaDeVermifugos/{animal_id}`: Exibe lista de vermífugos de um animal específico.
+* `GET /animal/exibirListaDeCarrapaticidas/{animal_id}`: Exibe lista de carrapaticidas de um animal específico.
 * `GET /animal/exibirListaDeConsultas/{idAnimal}`: Exibe lista de consultas de um animal específico.
-* `PUT /animal/{idAnimal}`: Atualiza as informações de um animal.
-* `DELETE /animal/{idAnimal}`: Exclui um animal.
-* `DELETE /animal/{idAnimal}/removerVacinaDaLista/{idVacina}`: Remove uma vacina da lista de vacinas de um animal.
-* `DELETE /animal/{idAnimal}/removerVermifugoDaLista/{idVerm}`: Remove um vermífugo da lista de vermífugos de um animal.
-* `DELETE /animal/{idAnimal}/removerCarrapDaLista/{idCarrap}`: Remove um carrapaticida da lista de carrapaticidas de um animal.
-* `DELETE /animal/{idAnimal}/removerConsultaListaAnimal/{idConsulta}`: Remove uma consulta da lista de consultas de um animal.
+* `PUT /animal/{animal_id}`: Atualiza as informações de um animal.
+* `DELETE /animal/{tutor_id}/excluirAnimal/{animal_id}`: Exclui um animal e o remove da lista de animais do tutor.
 
-### CarrapatoPulga:
-* `POST /carrapatoPulga`: Cria um novo carapaticida.
-* `POST /carraptoPulga/{idTutor}/enviarLembreteDeCarrapaticidaPorEmail/{proximaDose}`: Envia lembrete de dose de reforço para o tutor.
-* `GET /carrapatoPulga`: Lista todos os carrapaticidas.
-* `GET /carrapatoPulga/{idCarrap}`: Obtém informações de um carrapaticida específico.
-* `GET /carrapatoPulga/data/{data`: Busca um carrapaticida pela data da aplicação.
-* `PUT /carrapatoPulga/{idCarrap}`: Atualiza as informações de um carrapaticida.
-* `DELETE /carrapatoPulga/{idCarrap}`: Exclui um carrapaticida.
+### Carrapaticida:
+* `POST /carrapaticida/{animal_id}`: Cadastra uma nova dosagem de carapaticida e adiciona à lista de carrapaticidas do animal.
+* `GET /carrapaticida/{carrap_id}`: Obtém informações de um carrapaticida específico.
+* `PUT /carrapaticida/{carrap_id}`: Atualiza as informações de um carrapaticida.
+* `DELETE /carrapaticida/{animal_id}/ecluirCarrapaticida/{carrap_id}`: Exclui um carrapaticida e o remove da lista de carrapaticidas do animal.
 
 ### Vacina:
-* `POST /vacina`: Cadastra uma nova vacina.
-* `POST /vacina/{idTutor}/enviarLembretePorEmail/{dataDaProximaDose}`: Envia lembrete de dose de reforço para o tutor.
-* `GET /vacina`: Lista todos os carrapaticidas.
-* `GET /vacna/{idVacina}`: Obtém informações de uma vacina específica.
-* `PUT /vacina/{idVacina}`: Atualiza as informações de uma vacina.
-* `DELETE /vacina/{idVacina}`: Exclui uma vacina.
+* `POST /vacina/{animal_id}`: Cadastra uma nova vacina e a adiciona na lista de vacinas do animal.
+* `GET /vacna/{vacina_id}`: Obtém informações de uma vacina específica.
+* `PUT /vacina/{vacina_id}`: Atualiza as informações de uma vacina.
+* `DELETE /vacina/{animal_id}/excluirVacina/{vacina_id}`: Exclui uma vacina e a remove da lista de vacinas do animal.
 
 ### Vermifugacao:
-* `POST /vermifugacao`: Cadastra um novo vermífugo.
-* `POST /vermifugacao/{idTutor}/enviarLembreteDeVermifugacaoPorEmail/{proximaDose}`: Envia lembrete de dose de reforço para o tutor.
-* `GET /vermifugacao`: Lista todos os vermífugos.
-* `GET /vermifugacao/{idVerm}`: Obtém informações de um vermífugo específico.
-* `PUT /vermifugacao/{idVerm}`: Atualiza as informações de um vermífugo.
-* `DELETE /vermifugacao/{idVerm}`: Exclui um vermífugo.
+* `POST /vermifugacao/{animal_id}`: Cadastra uma nova dosagem de vermífugo e a adiciona na lista de vermífugos do animal.
+* `GET /vermifugacao/{verm_id}`: Obtém informações de um vermífugo específico.
+* `PUT /vermifugacao/{verm_id}`: Atualiza as informações de um vermífugo.
+* `DELETE /vermifugacao/{animal_id}/excluirvermifugo/{verm_id}`: Exclui uma dosagem de vermífugo e a remove da lista de vermífugos do animal.
 
 ### Consulta:
-* `POST /consulta`: Cadastra uma nova consulta.
-* `GET /consulta`: Lista todas as consultas.
-* `GET /consulta/{idConsulta}`: Obtém informações de uma consulta específica.
-* `PUT /consulta/{idConsulta}`: Atualiza as informações de uma consulta.
-* `DELETE /consulta/{idConsulta}`: Exclui uma consulta.
+* `POST /consulta/{animal_id}`: Cadastra uma nova consulta e a adiciona na lista de consultas do animal.
+* `GET /consulta/periodo"`: Lista todas as consultas realizadas em um determinado período.
+* `GET /consulta/{consulta_id}`: Obtém informações de uma consulta específica.
+* `GET /consulta/tipo/{animal_id}"`: Lista todas as consultas do animal de acordo com o tipo (rotina ou urgência).
+* `PUT /consulta/{consulta_id}`: Atualiza as informações de uma consulta.
+* `DELETE /consulta/{animal_id}/excluir/{consulta_id}`: Exclui uma consulta e a remove da lista de consultas do animal.
 
 ## Chamando os Endpoints via Postman
 Após iniciar a aplicação, você pode acessar a documentação interativa da API por meio Postman. Lá, você encontrará uma interface fácil de usar para explorar e testar os endpoints da API.
