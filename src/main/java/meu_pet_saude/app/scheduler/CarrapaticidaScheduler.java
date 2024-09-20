@@ -11,37 +11,35 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.model.Tutor;
-import meu_pet_saude.app.model.Vacina;
-import meu_pet_saude.app.repository.VacinaRepository;
+import meu_pet_saude.app.repository.CarrapaticidaRepository;
 
 @Component
 @EnableScheduling
-public class VacinaScheduler {
-
+public class CarrapaticidaScheduler {
+    
     @Scheduled(cron = CRON_EXPRESSION, zone = TIME_ZONE)
-    public void enviarNotificacaoVacina() {
-
+    public void enviarNotificacaoDeCarrapaticida() {
         LocalDate hoje = LocalDate.now();
-        LocalDate umAnoAtras = hoje.minusYears(1);
+        LocalDate umMesAtras = hoje.minusMonths(1);
 
-        List<Vacina> vacinasParaReforco = vacinaRepository.findByData(umAnoAtras);
+        List<Carrapaticida> carrapaticidasReforco = carrapaticidaRepository.findByData(umMesAtras);
 
-        for (Vacina vacina : vacinasParaReforco) {
-            enviarEmailVacina(vacina);
+        for (Carrapaticida carrapaticida : carrapaticidasReforco) {
+            enviarEmail(carrapaticida);
         }
-        
+
     }
 
-    public void enviarEmailVacina(Vacina vacina) {
+    public void enviarEmail(Carrapaticida carrapaticida) {
+        Tutor tutor = carrapaticida.getAnimal().getTutor();
 
-        Tutor tutor = vacina.getAnimal().getTutor();
-        
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setSubject("Lembrete de Vacina!");
+        email.setSubject("Lembrete de reforço de Carrapaticida!");
         email.setFrom(EMAIL_SENDER);
         email.setTo(tutor.getEmail());
-        email.setText("Hoje é dia de " + vacina.getAnimal().getNome() + " tomar a dose de reforço da " + vacina.getNomeVacina());
+        email.setText("Hoje é o dia da dose de reforço do carrapaticida de " + carrapaticida.getAnimal().getNome());
 
         javaMailSender.send(email);
     }
@@ -54,9 +52,8 @@ public class VacinaScheduler {
     private String EMAIL_SENDER;
 
     @Autowired
-    private VacinaRepository vacinaRepository;
+    private CarrapaticidaRepository carrapaticidaRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
-    
 }

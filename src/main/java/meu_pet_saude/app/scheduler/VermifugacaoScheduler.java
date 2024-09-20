@@ -12,36 +12,34 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import meu_pet_saude.app.model.Tutor;
-import meu_pet_saude.app.model.Vacina;
-import meu_pet_saude.app.repository.VacinaRepository;
+import meu_pet_saude.app.model.Vermifugacao;
+import meu_pet_saude.app.repository.VermifugacaoRepository;
 
 @Component
 @EnableScheduling
-public class VacinaScheduler {
-
+public class VermifugacaoScheduler {
+    
     @Scheduled(cron = CRON_EXPRESSION, zone = TIME_ZONE)
-    public void enviarNotificacaoVacina() {
+    public void enviarNotificacaoVermifugo() {
 
         LocalDate hoje = LocalDate.now();
-        LocalDate umAnoAtras = hoje.minusYears(1);
 
-        List<Vacina> vacinasParaReforco = vacinaRepository.findByData(umAnoAtras);
+        List<Vermifugacao> vermifugosParaReforco = vermifugacaoRepository.findByData(hoje.minusMonths(6));
 
-        for (Vacina vacina : vacinasParaReforco) {
-            enviarEmailVacina(vacina);
+        for (Vermifugacao vermifugacao : vermifugosParaReforco) {
+            enviarEmail(vermifugacao);
         }
-        
+
     }
 
-    public void enviarEmailVacina(Vacina vacina) {
+    public void enviarEmail(Vermifugacao vermifugacao) {
+        Tutor tutor = vermifugacao.getAnimal().getTutor();
 
-        Tutor tutor = vacina.getAnimal().getTutor();
-        
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setSubject("Lembrete de Vacina!");
-        email.setFrom(EMAIL_SENDER);
+        email.setSubject("Lembrete de vermifugo!");
         email.setTo(tutor.getEmail());
-        email.setText("Hoje é dia de " + vacina.getAnimal().getNome() + " tomar a dose de reforço da " + vacina.getNomeVacina());
+        email.setFrom(EMAIL_SENDER);
+        email.setText("Hoje é o dia de " + vermifugacao.getAnimal().getNome() + " tomar a dose de reforco do vermifugo!");
 
         javaMailSender.send(email);
     }
@@ -54,9 +52,10 @@ public class VacinaScheduler {
     private String EMAIL_SENDER;
 
     @Autowired
-    private VacinaRepository vacinaRepository;
+    private VermifugacaoRepository vermifugacaoRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
-    
+
+
 }
