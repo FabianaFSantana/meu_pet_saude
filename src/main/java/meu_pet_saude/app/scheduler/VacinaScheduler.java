@@ -46,7 +46,7 @@ public class VacinaScheduler {
         javaMailSender.send(email);
     }
 
-    private final String CRON_EXPRESSION = "0 0 17 * * *";
+    private final String CRON_EXPRESSION = "0 05 06 * * *";
 
     private final String TIME_ZONE = "America/Sao_Paulo";
 
