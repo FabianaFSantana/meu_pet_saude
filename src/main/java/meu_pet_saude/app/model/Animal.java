@@ -75,6 +75,10 @@ public class Animal {
     @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "animal_id")
     private List<Consulta> consultas;
+
+    @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
+    @JoinColumn(name = "animal_id")
+    private List<Racao> racoes;
     
     
     public void addVacina(Vacina vacina) {
@@ -91,6 +95,10 @@ public class Animal {
 
     public void addConsulta(Consulta consulta) {
         this.consultas.add(consulta);
+    }
+
+    public void addRacao(Racao racao) {
+        this.racoes.add(racao);
     }
 
 
