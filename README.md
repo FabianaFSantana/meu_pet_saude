@@ -3,12 +3,12 @@
 ![meu pet saúde](https://github.com/FabianaFSantana/meu_pet_saude/assets/161942930/0427791b-ec45-4545-a8a4-8494e771f216)
 
 # meu_pet_saude
-Api Rest para desenvolvimento de um app de caderneta de saúde Pet.
+API REST para desenvolvimento de um app de caderneta de saúde Pet.
 
 </div>
 
 ## Descrição do Projeto
-O Meu Pet Saúde é uma API REST desenvolvida com Spring Boot para servir como backend de uma aplicação controle veterinário para cães e gatos de estimação. Ele oferece recursos para manipulação de tutores, pets, controle de vacinas, vermifugação, atiparasitários e consultas verterinárias, assim como envio por email de mensagem de aniversário para os tutores, proporcionando uma interface para interação com o banco de dados MySQL. Fonerce segurança através de criação e autenticação de token pelo Spring Security para possibilitar a segurança do usuário.
+O Meu Pet Saúde é uma API REST desenvolvida com Spring Boot para servir como backend de uma aplicação controle veterinário para cães e gatos de estimação. Ele oferece recursos para manipulação de tutores, pets, controle de vacinas, vermifugação, atiparasitários e consultas verterinárias, assim como envio por email de mensagem de aniversário para os tutores e de notificações de lembretes das doses de reforço através de um agendamento de tarefas, proporcionando uma interface para interação com o banco de dados MySQL. Fonerce segurança através da autenticação do usuário e seu cadastro por meio de login utilizando o Spring Security, assim como a autenticação de token através do JWT, para possibilitar a segurança do usuário.
 
 ## Configuração do Ambiente
 
@@ -69,7 +69,7 @@ O projeto é estruturado da seguinte forma:
 * `com.meu_pet_saude.api.repository`: Repositórios para interação com o banco de dados.
 * `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
 * `com.meu_pet_saude.api.security`: Filtro e Configuração para permitir ou não o acesso à API.
-* `com.meu_pet_saude.api.scheduler`: Agendador para enviar mensagem de aniversário para o tutor.
+* `com.meu_pet_saude.api.scheduler`: Agendador de tarefas para enviar mensagem de aniversário para o tutor, assim como envio de notificações para lembretes de doses de reforço das vacinas, vermifugos e carrapaticidas do pet.
 
 ## Uso da API
 A API possui os seguintes endpoints:
