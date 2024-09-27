@@ -21,6 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import meu_pet_saude.app.constant.Especie;
 import meu_pet_saude.app.constant.Genero;
+import meu_pet_saude.app.dto.AnimalDTO;
 
 @Data
 @NoArgsConstructor
@@ -79,7 +80,17 @@ public class Animal {
     @OneToMany(cascade = {CascadeType.ALL, CascadeType.REMOVE}, orphanRemoval = true)
     @JoinColumn(name = "animal_id")
     private List<Racao> racoes;
-    
+
+    public AnimalDTO converterAnimalDTO() {
+        AnimalDTO dto = new AnimalDTO();
+
+        dto.setNome(nome);
+        dto.setEspecie(especie);
+        dto.setRaca(raca);
+        dto.setGenero(genero);
+
+        return dto;
+    }
     
     public void addVacina(Vacina vacina) {
         this.vacinas.add(vacina);

@@ -22,6 +22,7 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import meu_pet_saude.app.dto.TutorDTO;
+import meu_pet_saude.app.dto.TutorAnimaisDTO;
 
 @Data
 @AllArgsConstructor
@@ -75,10 +76,18 @@ public class Tutor implements UserDetails{
         dto.setNome(nome);
         dto.setEmail(email);
         dto.setTelefone(telefone);
+        dto.setEndereco(endereco);
         dto.setAdministrador(administrador);
         dto.setUsuarioExterno(usuarioExterno);
         dto.setToken(null);
 
+        return dto;
+    }
+
+    public TutorAnimaisDTO listarTutorNomeDTO() {
+        TutorAnimaisDTO dto = new TutorAnimaisDTO();
+
+        dto.setNomeTutor(nome);
         return dto;
     }
 

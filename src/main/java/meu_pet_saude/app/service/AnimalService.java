@@ -50,10 +50,8 @@ public class AnimalService {
             racaoRepository.save(racao);
             animalRepository.save(animal);
 
-            return racao;
-            
+            return racao; 
         }
-
         return null;
     }
 

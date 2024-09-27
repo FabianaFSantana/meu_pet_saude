@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import meu_pet_saude.app.constant.Especie;
+import meu_pet_saude.app.dto.RacaoDTO;
 
 @Data
 @NoArgsConstructor
@@ -49,9 +50,23 @@ public class Racao {
     private Double quantidadeDiaria;
 
     @Column(nullable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataProximaCompra;
     
     @ManyToOne
     @JoinColumn(name = "animal_id")
     private Animal animal;
+
+    public RacaoDTO converteRacaoDTO() {
+        RacaoDTO dto = new RacaoDTO();
+
+        dto.setNome(nomeRacao);
+        dto.setEspecie(especie);
+        dto.setLoja(loja);
+        dto.setDataUltimaCompra(dataUltimaCompra);
+        dto.setPreco(preco);
+        dto.setDataProximaCompra(dataProximaCompra);
+
+        return dto;
+    }
 }
