@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +38,7 @@ public class RacaoController {
     }
 
     @GetMapping("/{racao_id}")
-    public ResponseEntity<Racao> exibirRacaoPeloId(@PathVariable("racao_id") Long id) {
+    public ResponseEntity<RacaoDTO> exibirRacaoPeloId(@PathVariable("racao_id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(racaoService.buscarRacaoPeloId(id));
     }
 
@@ -59,6 +61,16 @@ public class RacaoController {
     public ResponseEntity<List<RacaoDTO>> exibirListaDeRacoesDoAnimal(@PathVariable("animal_id") Long idAnimal) {
         return ResponseEntity.status(HttpStatus.OK).body(racaoService.buscarRacoesPorAnimal(idAnimal));
     }
+
+    @PutMapping("/{racao_id}")
+    public ResponseEntity<Racao> atualizarDadosDaRacao(@PathVariable("racao_id") Long id, @RequestBody Racao racao) {
+        return ResponseEntity.status(HttpStatus.OK).body(racaoService.atualizarRacao(id, racao));
+    }
+
+    @DeleteMapping("/{animal_id}/excluirRacao/{id}")
+    public ResponseEntity<String> excluirRacao(@PathVariable("animal_id") Long idAnimal, @PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(racaoService.removerRacao(idAnimal, id));
+    } 
 
 
     @Autowired

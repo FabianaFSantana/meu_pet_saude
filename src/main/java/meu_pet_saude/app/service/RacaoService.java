@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.dto.RacaoDTO;
 import meu_pet_saude.app.model.Animal;
@@ -17,11 +18,12 @@ import meu_pet_saude.app.repository.RacaoRepository;
 @Service
 public class RacaoService {
 
-    public Racao buscarRacaoPeloId(Long id) {
+    public RacaoDTO buscarRacaoPeloId(Long id) {
         Optional<Racao> racaoOptional = racaoRepository.findById(id);
 
         if (racaoOptional.isPresent()) {
-            return racaoOptional.get();
+            Racao racao = racaoOptional.get();
+            return racao.converteRacaoDTO();
         }
         return null;
     }
@@ -58,6 +60,49 @@ public class RacaoService {
         List<RacaoDTO> racoes = racaoRepository.findByDataUltimaCompraBetween(dataInicio, dataFinal).stream().map(racao -> new RacaoDTO(racao.getNomeRacao(), racao.getEspecie(), racao.getDataUltimaCompra(), racao.getLoja(), racao.getDataProximaCompra(), racao.getPreco())).collect(Collectors.toList());
         return racoes;
     }
+
+    public Racao atualizarRacao(Long id, Racao racao) {
+        Optional<Racao> racaoOptional = racaoRepository.findById(id);
+
+        if (racaoOptional.isPresent()) {
+            Racao racaoEncontrada = racaoOptional.get();
+
+            racaoEncontrada.setAnimal(racao.getAnimal());
+            racaoEncontrada.setDataProximaCompra(racao.getDataProximaCompra());
+            racaoEncontrada.setDataUltimaCompra(racao.getDataUltimaCompra());
+            racaoEncontrada.setEspecie(racao.getEspecie());
+            racaoEncontrada.setLoja(racao.getLoja());
+            racaoEncontrada.setNomeRacao(racao.getNomeRacao());
+            racaoEncontrada.setPeso(racao.getPeso());
+            racaoEncontrada.setPreco(racao.getPreco());
+            racaoEncontrada.setQuantidadeDiaria(racao.getQuantidadeDiaria());
+
+            return racaoRepository.save(racaoEncontrada);
+        }
+        return null;
+    }
+
+    @Transactional
+    public String removerRacao(Long idAnimal, Long id) {
+        Animal animal = animalRepository.findById(idAnimal).orElse(null);
+        Racao racao = racaoRepository.findById(id).orElse(null);
+
+        if (animal == null) {
+            return "Animal não encontrado!";
+        }
+
+        if (racao == null) {
+            return "Ração não encontrada!";
+        }
+
+        List<Racao> racoes = animal.getRacoes();
+        if (racoes.remove(racao)) {
+            animalRepository.save(animal);
+            racaoRepository.deleteById(id);
+            return "Ração removida com sucesso!";
+        }
+        return "Ração não encontrada na lista do animal!";
+    } 
 
     
 

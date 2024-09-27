@@ -10,6 +10,7 @@ import meu_pet_saude.app.constant.Especie;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class RacaoDTO {
     private String nome;
     private Especie especie;
