@@ -1,7 +1,5 @@
 package meu_pet_saude.app.controller;
 
-//import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +31,7 @@ public class VacinaController {
     }
 
     @GetMapping("/{vacina_id}")
-    public ResponseEntity<Vacina> exibirVacinaPeloId(@PathVariable("vacina_id") Long idVacina) {
+    public ResponseEntity<VacinaDTO> exibirVacinaPeloId(@PathVariable("vacina_id") Long idVacina) {
         return ResponseEntity.status(HttpStatus.OK).body(vacinaService.buscarVacinaPorId(idVacina));
     }
 
