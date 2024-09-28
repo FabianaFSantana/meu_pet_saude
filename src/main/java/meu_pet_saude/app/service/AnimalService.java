@@ -4,11 +4,14 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import meu_pet_saude.app.dto.AnimalDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.model.Consulta;
@@ -27,16 +30,16 @@ import meu_pet_saude.app.repository.VermifugacaoRepository;
 @Service
 public class AnimalService {
     
-    public List<Animal> exibirListaDeAnimais() {
-        return animalRepository.findAll();
+    public List<AnimalDTO> exibirListaDeAnimais() {
+        return animalRepository.findAll().stream().map(animal -> new AnimalDTO(animal.getNome(), animal.getEspecie(), animal.getRaca(), animal.getGenero())).collect(Collectors.toList());
     }
 
-    public Animal buscarAnimalPeloId(Long id) {
+    public AnimalDTO buscarAnimalPeloId(Long id) {
         Optional<Animal> animOptional = animalRepository.findById(id);
 
         if (animOptional.isPresent()) {
             Animal animal = animOptional.get();
-            return animal;
+            return animal.converterAnimalDTO();
         }
         return null;
     }
@@ -119,12 +122,12 @@ public class AnimalService {
         return null;
     }
 
-    public List<Animal> exibirListaDeAnimaisDoTutor(Long idTutor) {
+    public List<AnimalDTO> exibirListaDeAnimaisDoTutor(Long idTutor) {
         Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
 
         if (tutorOptional.isPresent()) {
             Tutor tutor = tutorOptional.get();
-            return tutor.getAnimais();
+            return tutor.getAnimais().stream().map(animal -> new AnimalDTO(animal.getNome(), animal.getEspecie(), animal.getRaca(), animal.getGenero())).collect(Collectors.toList());
             
         } else {
             return Collections.emptyList();

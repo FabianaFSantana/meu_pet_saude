@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.dto.TutorDTO;
+import meu_pet_saude.app.dto.AnimalDTO;
 import meu_pet_saude.app.dto.TutorAnimaisDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Tutor;
@@ -28,9 +30,9 @@ import meu_pet_saude.app.service.TutorService;
 public class TutorController {
 
 
-    @PreAuthorize("hasRole('ROLE_ADIMIN')")
+    @Secured("ROLE_ADMIN")
     @PostMapping
-    public ResponseEntity<Tutor> cadastrarTutor(@RequestBody Tutor tutor){
+    public ResponseEntity<TutorDTO> cadastrarTutor(@RequestBody Tutor tutor){
          return ResponseEntity.status(HttpStatus.CREATED)
         .body(tutorService.salvarTutor(tutor));
     }
@@ -42,6 +44,12 @@ public class TutorController {
         return ResponseEntity.status(HttpStatus.OK).body(tutoresComAnimais);
     }
 
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/buscarEmail")
+    public ResponseEntity<TutorDTO> exibirTutorPeloEmail(@RequestParam("email") String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(tutorService.buscaTutorPeloEmail(email));
+    }
+
     @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @GetMapping("/{id}")
     public ResponseEntity<TutorDTO> exibirTutorPeloId(@PathVariable("id") Long id) {
@@ -50,15 +58,15 @@ public class TutorController {
 
     @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @GetMapping("/exibirListaDeAnimaisTutor/{idTutor}")
-    public ResponseEntity<List<Animal>> exibirListaAnimais(@PathVariable("idTutor") Long idTutor) {
-        List<Animal> animais = animalService.exibirListaDeAnimaisDoTutor(idTutor);
+    public ResponseEntity<List<AnimalDTO>> exibirListaAnimais(@PathVariable("idTutor") Long idTutor) {
+        List<AnimalDTO> animais = animalService.exibirListaDeAnimaisDoTutor(idTutor);
         return ResponseEntity.status(HttpStatus.OK)
         .body(animais);
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @PutMapping("/{id}")
-    public ResponseEntity<Tutor> atualizarTutorPeloId(@PathVariable("id") Long id,
+    public ResponseEntity<TutorDTO> atualizarTutorPeloId(@PathVariable("id") Long id,
     @RequestBody Tutor tutor) {
             return ResponseEntity.status(HttpStatus.OK).body(tutorService.atualizarDadosTutor(id, tutor));
     }
