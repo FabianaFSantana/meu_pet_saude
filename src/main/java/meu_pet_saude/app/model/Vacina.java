@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import meu_pet_saude.app.dto.VacinaDTO;
 
 @Data
 @NoArgsConstructor
@@ -39,7 +40,24 @@ public class Vacina {
     @Column(nullable = false)
     private String nomeVeterinario;
 
+    @Column(nullable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate proximaDose;
+
     @ManyToOne
-    @JoinColumn(name = "animal_id")
+    @JoinColumn(name = "animal_id", nullable = false)
     private Animal animal;
+
+    public VacinaDTO converterVacinaDTO() {
+        VacinaDTO dto = new VacinaDTO();
+        
+        dto.setNome(animal.getNome());
+        dto.setVacina(nomeVacina);
+        dto.setDataAplicacao(data);
+        dto.setVeterinario(nomeVeterinario);
+        dto.setProximaDose(proximaDose);
+
+        return dto;
+    }
+    
 }

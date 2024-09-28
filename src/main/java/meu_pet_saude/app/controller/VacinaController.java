@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import meu_pet_saude.app.dto.VacinaDTO;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.VacinaService;
@@ -25,19 +26,11 @@ public class VacinaController {
 
 
     @PostMapping("/{animal_id}")
-    public ResponseEntity<Vacina> cadastrarVacina(@PathVariable("animal_id") Long idAnimal, @RequestBody Vacina vacina) {
+    public ResponseEntity<VacinaDTO> cadastrarVacina(@PathVariable("animal_id") Long idAnimal, @RequestBody Vacina vacina) {
 
-        Vacina novaVacina = animalService.adicionarVacinaNaListaDoAnimal(idAnimal, vacina);
+        VacinaDTO novaVacina = animalService.adicionarVacinaNaListaDoAnimal(idAnimal, vacina);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaVacina);
     }
-
-    /*@PostMapping("/{idTutor}/enviarLembretePorEmail/{dataDaProximaDose}") 
-    public ResponseEntity<String> enviarEmail(@PathVariable("idTutor") Long idTutor, 
-    @PathVariable("dataDaProximaDose") LocalDate dataDaProximaDose) {
-        vacinaService.enviarLemreteDeDoseDeReforcoVacinaPorEmail(idTutor, dataDaProximaDose);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Lembrete de vacina enviado para o email.");
-    }*/
 
     @GetMapping("/{vacina_id}")
     public ResponseEntity<Vacina> exibirVacinaPeloId(@PathVariable("vacina_id") Long idVacina) {

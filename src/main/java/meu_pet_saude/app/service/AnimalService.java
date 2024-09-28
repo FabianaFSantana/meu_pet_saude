@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.dto.AnimalDTO;
+import meu_pet_saude.app.dto.VacinaDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.model.Consulta;
@@ -51,7 +52,7 @@ public class AnimalService {
             Animal animal = animalOptional.get();
 
             racaoRepository.save(racao);
-            LocalDate dataProximaCompra = (racaoService.calcularConsumoDaRacao(racao.getId()));
+            LocalDate dataProximaCompra = racaoService.calcularConsumoDaRacao(racao.getId());
             racao.setDataProximaCompra(dataProximaCompra);
             animal.addRacao(racao);
             animalRepository.save(animal);
@@ -61,17 +62,20 @@ public class AnimalService {
         return null;
     }
 
-    public Vacina adicionarVacinaNaListaDoAnimal(Long id, Vacina vacina) {
+    public VacinaDTO adicionarVacinaNaListaDoAnimal(Long id, Vacina vacina) {
         Optional<Animal> animalOptional = animalRepository.findById(id);
 
         if (animalOptional.isPresent()) {
             Animal animal = animalOptional.get();
 
-            animal.addVacina(vacina);
             vacinaRepository.save(vacina);
+            LocalDate proximaDose = vacinaService.calcularProximaDoseVacina(vacina.getIdVacina());
+            vacina.setProximaDose(proximaDose);
+
+            animal.addVacina(vacina);
             animalRepository.save(animal);
             
-            return vacina;
+            return vacina.converterVacinaDTO();
         }
         return null;
     }
@@ -199,5 +203,8 @@ public class AnimalService {
 
     @Autowired
     private RacaoService racaoService;
+
+    @Autowired 
+    private VacinaService vacinaService;
 
 }

@@ -23,9 +23,8 @@ public class VacinaScheduler {
     public void enviarNotificacaoVacina() {
 
         LocalDate hoje = LocalDate.now();
-        LocalDate umAnoAtras = hoje.minusYears(1);
 
-        List<Vacina> vacinasParaReforco = vacinaRepository.findByData(umAnoAtras);
+        List<Vacina> vacinasParaReforco = vacinaRepository.findByProximaDose(hoje);
 
         for (Vacina vacina : vacinasParaReforco) {
             enviarEmailVacina(vacina);

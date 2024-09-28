@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +25,23 @@ public class VacinaService {
             Vacina vacina = vacinaOptional.get();
 
             return vacina;
+        }
+        return null;
+    }
+
+    public LocalDate calcularProximaDoseVacina(Long idVacina) {
+        Optional<Vacina> vacinaOptional = vacinaRepository.findById(idVacina);
+
+        if (vacinaOptional.isPresent()) {
+            Vacina vacina = vacinaOptional.get();
+
+            LocalDate dataDose = vacina.getData();
+            LocalDate proximaVacina = dataDose.plusDays(365);
+
+            vacina.setProximaDose(proximaVacina);
+            vacinaRepository.save(vacina);
+
+            return proximaVacina;
         }
         return null;
     }
