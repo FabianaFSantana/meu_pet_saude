@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Racao;
 import java.util.List;
+import java.util.Optional;
 import java.time.LocalDate;
 import meu_pet_saude.app.constant.Especie;
 
@@ -22,4 +23,6 @@ public interface RacaoRepository extends JpaRepository<Racao, Long> {
     List<Racao> findByDataUltimaCompraBetween (LocalDate dataInicio, LocalDate dataFinal);
 
     List<Racao> findByEspecie(Especie especie);
+
+    List<Racao> findByDataProximaCompra(LocalDate dataProximaCompra);
 }

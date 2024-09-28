@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -46,8 +47,10 @@ public class AnimalService {
         if (animalOptional.isPresent()) {
             Animal animal = animalOptional.get();
 
-            animal.addRacao(racao);
             racaoRepository.save(racao);
+            LocalDate dataProximaCompra = (racaoService.calcularConsumoDaRacao(racao.getId()));
+            racao.setDataProximaCompra(dataProximaCompra);
+            animal.addRacao(racao);
             animalRepository.save(animal);
 
             return racao; 
@@ -190,5 +193,8 @@ public class AnimalService {
 
     @Autowired
     private RacaoRepository racaoRepository;
+
+    @Autowired
+    private RacaoService racaoService;
 
 }

@@ -18,6 +18,25 @@ import meu_pet_saude.app.repository.RacaoRepository;
 @Service
 public class RacaoService {
 
+     public LocalDate calcularConsumoDaRacao(Long id) {
+        Optional<Racao> racaoOptional = racaoRepository.findById(id);
+
+        if (racaoOptional.isPresent()) {
+            Racao racao = racaoOptional.get();
+            Double pesoRacaoEmGramas = racao.getPeso() * 1000;
+            Double consumoDiario = racao.getQuantidadeDiaria();
+            int dias = (int) Math.floor(pesoRacaoEmGramas / consumoDiario);
+
+            LocalDate dataUltimaCompra = racao.getDataUltimaCompra();
+            LocalDate dataProximaCompra = dataUltimaCompra.plusDays(dias);
+
+            racao.setDataProximaCompra(dataProximaCompra);
+            racaoRepository.save(racao);  
+            return dataProximaCompra;   
+        }
+        return null;
+     }
+
     public RacaoDTO buscarRacaoPeloId(Long id) {
         Optional<Racao> racaoOptional = racaoRepository.findById(id);
 
