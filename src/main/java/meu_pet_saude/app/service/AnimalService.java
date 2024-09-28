@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -11,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.model.Consulta;
+import meu_pet_saude.app.model.Racao;
 import meu_pet_saude.app.model.Tutor;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
 import meu_pet_saude.app.repository.CarrapaticidaRepository;
 import meu_pet_saude.app.repository.ConsultaRepository;
+import meu_pet_saude.app.repository.RacaoRepository;
 import meu_pet_saude.app.repository.TutorRepository;
 import meu_pet_saude.app.repository.VacinaRepository;
 import meu_pet_saude.app.repository.VermifugacaoRepository;
@@ -34,6 +37,23 @@ public class AnimalService {
         if (animOptional.isPresent()) {
             Animal animal = animOptional.get();
             return animal;
+        }
+        return null;
+    }
+
+    public Racao adicionarRacaoNaListaDoAnimal(Long id, Racao racao) {
+        Optional<Animal> animalOptional = animalRepository.findById(id);
+
+        if (animalOptional.isPresent()) {
+            Animal animal = animalOptional.get();
+
+            racaoRepository.save(racao);
+            LocalDate dataProximaCompra = (racaoService.calcularConsumoDaRacao(racao.getId()));
+            racao.setDataProximaCompra(dataProximaCompra);
+            animal.addRacao(racao);
+            animalRepository.save(animal);
+
+            return racao; 
         }
         return null;
     }
@@ -170,5 +190,11 @@ public class AnimalService {
 
     @Autowired
     private ConsultaRepository consultaRepository;
+
+    @Autowired
+    private RacaoRepository racaoRepository;
+
+    @Autowired
+    private RacaoService racaoService;
 
 }

@@ -4,6 +4,7 @@ package meu_pet_saude.app.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ public class VermifugacaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(animalService.adicionarVermifugoListaAnimal(idAnimal, vermifugacao));
     }
 
+    @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @GetMapping("/{verm_id}")
     public ResponseEntity<Vermifugacao> exibirVermifugacaoPeloId(@PathVariable("verm_id") Long idVerm) {
         return ResponseEntity.status(HttpStatus.OK).body(vermifugacaoService.buscarVermifugacaoPorId(idVerm));

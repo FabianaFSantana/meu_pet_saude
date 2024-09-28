@@ -25,16 +25,23 @@ public class SecurityFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         
-        String token = _obterTokenDaRequisicao(request);
+        try {
+            String token = _obterTokenDaRequisicao(request);
 
-        if (Objects.nonNull(token)) {
-            String email = tokenService.obterEmailTutor(token);
-            UserDetails tutor = autentificacaoService.loadUserByUsername(email);
-
-            Authentication authentication = new UsernamePasswordAuthenticationToken(tutor, null, tutor.getAuthorities());
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (Objects.nonNull(token)) {
+                String email = tokenService.obterEmailTutor(token);
+                UserDetails tutor = autentificacaoService.loadUserByUsername(email);
+    
+                Authentication authentication = new UsernamePasswordAuthenticationToken(tutor, null, tutor.getAuthorities());
+    
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Erro de autenticação: " + e.getMessage());
+            return;
         }
+       
         filterChain.doFilter(request, response);
     }
 

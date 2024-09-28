@@ -2,12 +2,15 @@ package meu_pet_saude.app.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import meu_pet_saude.app.dto.AnimalDTO;
 import meu_pet_saude.app.dto.EnderecoDTO;
+import meu_pet_saude.app.dto.TutorAnimaisDTO;
 import meu_pet_saude.app.dto.TutorDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Endereco;
@@ -63,8 +66,17 @@ public class TutorService {
         return null;
     }
 
-    public List<Tutor> buscarTutores() {
-        return tutorRepository.findAll();
+    public List<TutorAnimaisDTO> buscarTutoresComAnimais() {
+        return tutorRepository.findAll()
+                                .stream()
+                                .map(tutor -> {List<AnimalDTO> animaisDTO = tutor.getAnimais()
+                                    .stream()
+                                    .map(animal -> new AnimalDTO(animal.getNome(), animal.getEspecie(), animal.getRaca(), animal.getGenero()))
+                                    .collect(Collectors.toList());
+                                return new TutorAnimaisDTO(tutor.getNome(), animaisDTO);
+                                }).collect(Collectors.toList());
+
+        
     }
 
     public TutorDTO buscarTutorPeloId(Long id) {
