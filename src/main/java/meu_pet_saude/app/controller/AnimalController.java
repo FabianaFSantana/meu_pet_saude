@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import meu_pet_saude.app.dto.RacaoDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.model.Consulta;
@@ -22,6 +23,7 @@ import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.CarrapaticidaService;
 import meu_pet_saude.app.service.ConsultaService;
+import meu_pet_saude.app.service.RacaoService;
 import meu_pet_saude.app.service.TutorService;
 import meu_pet_saude.app.service.VacinaService;
 import meu_pet_saude.app.service.VermifugacaoService;
@@ -66,6 +68,11 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.exibirConsultas(idAnimal));
     }
 
+    @GetMapping("/exibirListaDeRacoes/{animal_id}")
+    public ResponseEntity<List<RacaoDTO>> exibirListaDeRacoesDoAnimal(@PathVariable("animal_id") Long idAnimal){
+        return ResponseEntity.status(HttpStatus.OK).body(racaoService.buscarRacoesPorAnimal(idAnimal));
+    }
+
     @PutMapping("/{animal_id}")
     public ResponseEntity<Animal> atualizarDadosDoAnimal(@PathVariable("animal_id") Long idAnimal, @RequestBody Animal animal){
         return ResponseEntity.status(HttpStatus.OK).body(animalService.atualizarDadosDoAnimal(idAnimal, animal));
@@ -94,6 +101,9 @@ public class AnimalController {
 
     @Autowired
     private ConsultaService consultaService;
+
+    @Autowired
+    private RacaoService racaoService;
 
 
     
