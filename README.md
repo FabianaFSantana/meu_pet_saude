@@ -69,7 +69,7 @@ O projeto é estruturado da seguinte forma:
 * `com.meu_pet_saude.api.repository`: Repositórios para interação com o banco de dados.
 * `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
 * `com.meu_pet_saude.api.security`: Filtro e Configuração para permitir ou não o acesso à API.
-* `com.meu_pet_saude.api.scheduler`: Agendador de tarefas para enviar mensagem de aniversário para o tutor, assim como envio de notificações para lembretes de doses de reforço das vacinas, vermifugos e carrapaticidas do pet.
+* `com.meu_pet_saude.api.scheduler`: Agendador de tarefas para enviar mensagem de aniversário para o tutor, assim como envio de notificações para lembretes de doses de reforço das vacinas, vermifugos, carrapaticidas do pet e compra de rações.
 
 ## Uso da API
 A API possui os seguintes endpoints:
@@ -121,6 +121,16 @@ A API possui os seguintes endpoints:
 * `GET /consulta/tipo/{animal_id}"`: Lista todas as consultas do animal de acordo com o tipo (rotina ou urgência).
 * `PUT /consulta/{consulta_id}`: Atualiza as informações de uma consulta.
 * `DELETE /consulta/{animal_id}/excluir/{consulta_id}`: Exclui uma consulta e a remove da lista de consultas do animal.
+
+### Racao:
+* `POST /racao/{animal_id}`: Cadastra uma nova ração e a adiciona na lista de rações do animal.
+* `GET /racao"`: Lista todas as rações compradas e cadastradas.
+* `GET /racao/{racao_id}`: Obtém informações de uma ração específica.
+* `GET /racao/nomeRacao`: Lista todas as rações do animal de acordo com o nome da ração.
+* `GET /racao/nomeLoja`: Lista todas as rações do animal de acordo com o nome do petshop em que foram compradas.
+* `GET /racao/dataCompra`: Lista todas as rações do animal de acordo com a data de compra.
+* `PUT /racao/{racao_id}`: Atualiza as informações de uma ração cadastrada.
+* `DELETE /ração/{animal_id}/excluirRacao/{racao_id}`: Exclui uma ração e a remove da lista de rações do animal.
 
 ## Chamando os Endpoints via Postman
 Após iniciar a aplicação, você pode acessar a documentação interativa da API por meio Postman. Lá, você encontrará uma interface fácil de usar para explorar e testar os endpoints da API.
