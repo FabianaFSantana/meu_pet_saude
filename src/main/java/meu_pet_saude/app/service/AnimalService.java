@@ -81,17 +81,20 @@ public class AnimalService {
         return null;
     }
 
-    public VermifugacaoDTO adicionarVermifugoListaAnimal(Long idAnimal, Vermifugacao vermifugacao) {
+    public VermifugacaoDTO adicionarVermifugoListaAnimal(Long idAnimal, Vermifugacao vermifugo) {
         Optional<Animal> animOptional = animalRepository.findById(idAnimal);
 
         if (animOptional.isPresent()) {
             Animal animal = animOptional.get();
 
-            animal.addVermifugo(vermifugacao);
-            vermifugacaoRepository.save(vermifugacao);
+            vermifugacaoRepository.save(vermifugo);
+            LocalDate proximaDose = vermifugacaoService.calcularProximaDoseVermifugacao(idAnimal);
+            vermifugo.setProximaDose(proximaDose);
+
+            animal.addVermifugo(vermifugo);
             animalRepository.save(animal);
 
-            return vermifugacao.converterVermifugacaoDTO();
+            return vermifugo.converterVermifugacaoDTO();
         }
         return null;
     }
@@ -207,5 +210,7 @@ public class AnimalService {
 
     @Autowired 
     private VacinaService vacinaService;
-
+    
+    @Autowired
+    private VermifugacaoService vermifugacaoService;
 }

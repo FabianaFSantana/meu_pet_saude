@@ -1,5 +1,6 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,22 @@ import meu_pet_saude.app.repository.VermifugacaoRepository;
 @Service
 public class VermifugacaoService {
 
+    public LocalDate calcularProximaDoseVermifugacao(Long idVerm) {
+        Optional<Vermifugacao> vermifugacaoOptional = vermifugacaoRepository.findById(idVerm);
+
+        if (vermifugacaoOptional.isPresent()) {
+            Vermifugacao vermifugo = vermifugacaoOptional.get();
+
+            LocalDate dataDose = vermifugo.getData();
+            LocalDate proximaDose = dataDose.plusDays(180);
+
+            vermifugo.setProximaDose(proximaDose);
+            vermifugacaoRepository.save(vermifugo);
+
+            return proximaDose;
+        }
+        return null;
+    }
 
     public List<VermifugacaoDTO> exibirListaDeVermifugosDoAnimal(Long idAnimal) {
         
