@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import meu_pet_saude.app.dto.VermifugacaoDTO;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.VermifugacaoService;
@@ -23,13 +24,13 @@ import meu_pet_saude.app.service.VermifugacaoService;
 public class VermifugacaoController {
 
     @PostMapping("/{animal_id}")
-    public ResponseEntity<Vermifugacao> cadastrarVermifugacao(@PathVariable("animal_id") Long idAnimal, @RequestBody Vermifugacao vermifugacao) {
+    public ResponseEntity<VermifugacaoDTO> cadastrarVermifugacao(@PathVariable("animal_id") Long idAnimal, @RequestBody Vermifugacao vermifugacao) {
         return ResponseEntity.status(HttpStatus.CREATED).body(animalService.adicionarVermifugoListaAnimal(idAnimal, vermifugacao));
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @GetMapping("/{verm_id}")
-    public ResponseEntity<Vermifugacao> exibirVermifugacaoPeloId(@PathVariable("verm_id") Long idVerm) {
+    public ResponseEntity<VermifugacaoDTO> exibirVermifugacaoPeloId(@PathVariable("verm_id") Long idVerm) {
         return ResponseEntity.status(HttpStatus.OK).body(vermifugacaoService.buscarVermifugacaoPorId(idVerm));
     }
 
@@ -45,20 +46,6 @@ public class VermifugacaoController {
     }
 
     
-    
-
-   /* 
-     
-    @PostMapping("/{idTutor}/enviarLembreteDeVermifugacaoPorEmail/{proximaDose}")
-    public ResponseEntity<String> enviarLembreteVermifPorEmail(@PathVariable("idTutor") Long idTutor,
-    @PathVariable("proximaDose") LocalDate proximaDose) {
-        
-        vermifugacaoService.exibirListaDeVermifugosNaDataAtual(idTutor, proximaDose);
-        return ResponseEntity.status(HttpStatus.OK)
-        .body("Lembrete de vermífugo enviado com sucesso!");
-    }
-
-    */
     @Autowired
     private AnimalService animalService;
 

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.dto.AnimalDTO;
 import meu_pet_saude.app.dto.VacinaDTO;
+import meu_pet_saude.app.dto.VermifugacaoDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.model.Consulta;
@@ -80,7 +81,7 @@ public class AnimalService {
         return null;
     }
 
-    public Vermifugacao adicionarVermifugoListaAnimal(Long idAnimal, Vermifugacao vermifugacao) {
+    public VermifugacaoDTO adicionarVermifugoListaAnimal(Long idAnimal, Vermifugacao vermifugacao) {
         Optional<Animal> animOptional = animalRepository.findById(idAnimal);
 
         if (animOptional.isPresent()) {
@@ -90,7 +91,7 @@ public class AnimalService {
             vermifugacaoRepository.save(vermifugacao);
             animalRepository.save(animal);
 
-            return vermifugacao;
+            return vermifugacao.converterVermifugacaoDTO();
         }
         return null;
     }

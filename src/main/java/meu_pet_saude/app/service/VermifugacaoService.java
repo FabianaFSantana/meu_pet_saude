@@ -3,11 +3,13 @@ package meu_pet_saude.app.service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import meu_pet_saude.app.dto.VermifugacaoDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
@@ -17,25 +19,25 @@ import meu_pet_saude.app.repository.VermifugacaoRepository;
 public class VermifugacaoService {
 
 
-    public List<Vermifugacao> exibirListaDeVermifugosDoAnimal(Long idAnimal) {
+    public List<VermifugacaoDTO> exibirListaDeVermifugosDoAnimal(Long idAnimal) {
         
         Optional<Animal> animOptional = animalRepository.findById(idAnimal);
         if (animOptional.isPresent()) {
             Animal animalEncont = animOptional.get();
 
-            List<Vermifugacao> vermifugos =  animalEncont.getVermifugos();
+            List<VermifugacaoDTO> vermifugos =  animalEncont.getVermifugos().stream().map(vermifugo -> new VermifugacaoDTO(vermifugo.getNomeMedic(), vermifugo.getData(), vermifugo.getDosagem(), vermifugo.getProximaDose())).collect(Collectors.toList());
             return vermifugos;
         } else {
             return Collections.emptyList();
         }
     }
 
-    public Vermifugacao buscarVermifugacaoPorId(Long idVerm) {
+    public VermifugacaoDTO buscarVermifugacaoPorId(Long idVerm) {
         Optional<Vermifugacao> vermOptional = vermifugacaoRepository.findById(idVerm);
 
         if (vermOptional.isPresent()) {
             Vermifugacao vermifugo = vermOptional.get();
-            return vermifugo;
+            return vermifugo.converterVermifugacaoDTO();
         }
         return null;
     }
