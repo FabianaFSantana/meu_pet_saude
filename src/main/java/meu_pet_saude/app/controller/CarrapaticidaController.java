@@ -18,9 +18,9 @@ import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.CarrapaticidaService;
 
+@Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
 @RestController
 @RequestMapping("/carrapaticida")
-@Secured("ROLE_ADMIN")
 public class CarrapaticidaController {
 
     @PostMapping("/{animal_id}")

@@ -19,6 +19,7 @@ import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.VermifugacaoService;
 
+@Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
 @RestController
 @RequestMapping("/vermifugacao")
 public class VermifugacaoController {

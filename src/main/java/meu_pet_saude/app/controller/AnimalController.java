@@ -22,9 +22,6 @@ import meu_pet_saude.app.dto.RacaoDTO;
 import meu_pet_saude.app.dto.VacinaDTO;
 import meu_pet_saude.app.dto.VermifugacaoDTO;
 import meu_pet_saude.app.model.Animal;
-import meu_pet_saude.app.model.Carrapaticida;
-import meu_pet_saude.app.model.Consulta;
-import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.CarrapaticidaService;
 import meu_pet_saude.app.service.ConsultaService;
@@ -33,24 +30,23 @@ import meu_pet_saude.app.service.TutorService;
 import meu_pet_saude.app.service.VacinaService;
 import meu_pet_saude.app.service.VermifugacaoService;
 
+@Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
 @RestController
 @RequestMapping("/animal")
 public class AnimalController {
 
-    @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
+   
     @PostMapping("/{tutor_id}")
     public ResponseEntity<AnimalDTO> cadastrarAnimal(@PathVariable("tutor_id") Long id, @RequestBody Animal animal) {
         AnimalDTO novoAnimal = tutorService.adicionarAnimalNaListaDeTutor(id, animal);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoAnimal);
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @GetMapping
     public ResponseEntity<List<AnimalDTO>> exibirListaDeAnimaisCadastrados() {
         return ResponseEntity.status(HttpStatus.OK).body(animalService.exibirListaDeAnimais());
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @GetMapping("/{animal_id}")
     public ResponseEntity<AnimalDTO> buscarAnimalPeloId(@PathVariable("animal_id") Long idAnimal) {
         return ResponseEntity.status(HttpStatus.OK).body(animalService.buscarAnimalPeloId(idAnimal));
@@ -76,19 +72,16 @@ public class AnimalController {
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.exibirConsultas(idAnimal));
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @GetMapping("/exibirListaDeRacoes/{animal_id}")
     public ResponseEntity<List<RacaoDTO>> exibirListaDeRacoesDoAnimal(@PathVariable("animal_id") Long idAnimal){
         return ResponseEntity.status(HttpStatus.OK).body(racaoService.buscarRacoesPorAnimal(idAnimal));
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @PutMapping("/{animal_id}")
     public ResponseEntity<Animal> atualizarDadosDoAnimal(@PathVariable("animal_id") Long idAnimal, @RequestBody Animal animal){
         return ResponseEntity.status(HttpStatus.OK).body(animalService.atualizarDadosDoAnimal(idAnimal, animal));
     }
 
-    @Secured({"ROLE_ADMIN", "ROLE_EXT_USER"})
     @DeleteMapping("/{tutor_id}/excluirAnimal/{animal_id}")
     public ResponseEntity<String> excluirCadastroAnimal(@PathVariable("tutor_id") Long id, @PathVariable("animal_id") Long idAnimal) {
         return ResponseEntity.status(HttpStatus.OK).body(animalService.excluirAnimal(id, idAnimal));
