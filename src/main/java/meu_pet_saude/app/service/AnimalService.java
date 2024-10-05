@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.dto.AnimalDTO;
+import meu_pet_saude.app.dto.CarrapaticidaDTO;
 import meu_pet_saude.app.dto.VacinaDTO;
 import meu_pet_saude.app.dto.VermifugacaoDTO;
 import meu_pet_saude.app.model.Animal;
@@ -88,7 +89,7 @@ public class AnimalService {
             Animal animal = animOptional.get();
 
             vermifugacaoRepository.save(vermifugo);
-            LocalDate proximaDose = vermifugacaoService.calcularProximaDoseVermifugacao(idAnimal);
+            LocalDate proximaDose = vermifugacaoService.calcularProximaDoseVermifugacao(vermifugo.getIdVerm());
             vermifugo.setProximaDose(proximaDose);
 
             animal.addVermifugo(vermifugo);
@@ -100,17 +101,20 @@ public class AnimalService {
     }
 
 
-    public Carrapaticida adicionarCarrapaticidaListaAnimal(Long idAnimal, Carrapaticida carrapaticida) {
+    public CarrapaticidaDTO adicionarCarrapaticidaListaAnimal(Long idAnimal, Carrapaticida carrapaticida) {
         Optional<Animal> animalOptional = animalRepository.findById(idAnimal);
 
         if (animalOptional.isPresent()) {
             Animal animal = animalOptional.get();
 
-            animal.addCarrapaticida(carrapaticida);
             carrapaticidaRepository.save(carrapaticida);
+            LocalDate proximaDose = carrapaticidaService.calcularProximaDoseCarrapaticida(carrapaticida.getIdCarrapaticida());
+            carrapaticida.setProximaDose(proximaDose);
+
+            animal.addCarrapaticida(carrapaticida);
             animalRepository.save(animal);
         
-            return carrapaticida;
+            return carrapaticida.converterCarrapaticidaDTO();
         }
         return null;
     }
@@ -213,4 +217,7 @@ public class AnimalService {
     
     @Autowired
     private VermifugacaoService vermifugacaoService;
+
+    @Autowired
+    private CarrapaticidaService carrapaticidaService;
 }

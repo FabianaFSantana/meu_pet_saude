@@ -9,13 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VermifugacaoDTO {
+public class CarrapaticidaDTO {
     
     private String nomeAnimal;
-    private String vermifugo;
-    private LocalDate DataUltimaDose;
+    private String carrapaticida;
+    private double pesoAnimal;
     private double dosagem;
-    private LocalDate DataProximaDose;
-    
-
+    private LocalDate ultimaDose;
+    private LocalDate proximaDose;
 }

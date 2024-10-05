@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.dto.AnimalDTO;
+import meu_pet_saude.app.dto.CarrapaticidaDTO;
 import meu_pet_saude.app.dto.RacaoDTO;
 import meu_pet_saude.app.dto.VacinaDTO;
 import meu_pet_saude.app.dto.VermifugacaoDTO;
@@ -65,7 +66,7 @@ public class AnimalController {
     }
 
     @GetMapping("/exibirListaDeCarrapaticidas/{animal_id}")
-    public ResponseEntity<List<Carrapaticida>> exibirListaDeCarrapaticidas(@PathVariable("animal_id") Long idAnimal){
+    public ResponseEntity<List<CarrapaticidaDTO>> exibirListaDeCarrapaticidas(@PathVariable("animal_id") Long idAnimal){
         return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.exibirListaCarrapaticidasDoAnimal(idAnimal));
     }
 

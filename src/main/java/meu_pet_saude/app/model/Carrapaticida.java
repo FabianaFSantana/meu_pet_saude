@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import meu_pet_saude.app.dto.CarrapaticidaDTO;
 
 @Data
 @NoArgsConstructor
@@ -38,8 +39,25 @@ public class Carrapaticida {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate data;
 
+    @Column(nullable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate proximaDose;
+
     @ManyToOne
     @JoinColumn(name = "animal_id")
     private Animal animal;
+
+    public CarrapaticidaDTO converterCarrapaticidaDTO() {
+        CarrapaticidaDTO dto = new CarrapaticidaDTO();
+
+        dto.setNomeAnimal(animal.getNome());
+        dto.setCarrapaticida(nomeMedicamento);
+        dto.setPesoAnimal(peso);
+        dto.setDosagem(dosagem);
+        dto.setUltimaDose(data);
+        dto.setProximaDose(proximaDose);
+
+        return dto;
+    }
     
 }

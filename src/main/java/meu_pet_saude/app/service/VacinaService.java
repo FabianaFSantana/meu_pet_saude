@@ -58,6 +58,7 @@ public class VacinaService {
             vacEncontrada.setData(vacina.getData());
             vacEncontrada.setNomeDaClinica(vacina.getNomeDaClinica());
             vacEncontrada.setNomeVeterinario(vacina.getNomeVeterinario());
+            vacEncontrada.setProximaDose(vacina.getProximaDose());
 
             return vacinaRepository.save(vacEncontrada);
         }

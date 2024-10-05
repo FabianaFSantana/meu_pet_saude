@@ -22,9 +22,8 @@ public class CarrapaticidaScheduler {
     @Scheduled(cron = CRON_EXPRESSION, zone = TIME_ZONE)
     public void enviarNotificacaoDeCarrapaticida() {
         LocalDate hoje = LocalDate.now();
-        LocalDate umMesAtras = hoje.minusMonths(1);
 
-        List<Carrapaticida> carrapaticidasReforco = carrapaticidaRepository.findByData(umMesAtras);
+        List<Carrapaticida> carrapaticidasReforco = carrapaticidaRepository.findByProximaDose(hoje);
 
         for (Carrapaticida carrapaticida : carrapaticidasReforco) {
             enviarEmail(carrapaticida);
@@ -44,7 +43,7 @@ public class CarrapaticidaScheduler {
         javaMailSender.send(email);
     }
 
-    private final String CRON_EXPRESSION = "0 05 06 * * *";
+    private final String CRON_EXPRESSION = "0 55 06 * * *";
 
     private final String TIME_ZONE = "America/Sao_Paulo";
 

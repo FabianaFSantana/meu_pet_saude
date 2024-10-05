@@ -51,7 +51,7 @@ public class Vacina {
     public VacinaDTO converterVacinaDTO() {
         VacinaDTO dto = new VacinaDTO();
         
-        dto.setNome(animal.getNome());
+        dto.setNomeAnimal(animal.getNome());
         dto.setVacina(nomeVacina);
         dto.setDataAplicacao(data);
         dto.setVeterinario(nomeVeterinario);

@@ -42,7 +42,8 @@ public class VermifugacaoService {
         if (animOptional.isPresent()) {
             Animal animalEncont = animOptional.get();
 
-            List<VermifugacaoDTO> vermifugos =  animalEncont.getVermifugos().stream().map(vermifugo -> new VermifugacaoDTO(vermifugo.getNomeMedic(), vermifugo.getData(), vermifugo.getDosagem(), vermifugo.getProximaDose())).collect(Collectors.toList());
+            List<VermifugacaoDTO> vermifugos =  animalEncont.getVermifugos().stream().map(vermifugo -> new VermifugacaoDTO(vermifugo.getAnimal().getNome(), 
+            vermifugo.getNomeMedic(), vermifugo.getData(), vermifugo.getDosagem(), vermifugo.getProximaDose())).collect(Collectors.toList());
             return vermifugos;
         } else {
             return Collections.emptyList();
@@ -69,6 +70,7 @@ public class VermifugacaoService {
             vermEncontrada.setPeso(vermifugacao.getPeso());
             vermEncontrada.setDosagem(vermifugacao.getDosagem());
             vermEncontrada.setData(vermifugacao.getData());
+            vermEncontrada.setProximaDose(vermifugacao.getProximaDose());
 
             return vermifugacaoRepository.save(vermEncontrada);
         }

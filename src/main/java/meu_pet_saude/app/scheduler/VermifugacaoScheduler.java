@@ -24,7 +24,7 @@ public class VermifugacaoScheduler {
 
         LocalDate hoje = LocalDate.now();
 
-        List<Vermifugacao> vermifugosParaReforco = vermifugacaoRepository.findByData(hoje.minusMonths(6));
+        List<Vermifugacao> vermifugosParaReforco = vermifugacaoRepository.findByProximaDose(hoje);
 
         for (Vermifugacao vermifugacao : vermifugosParaReforco) {
             enviarEmail(vermifugacao);

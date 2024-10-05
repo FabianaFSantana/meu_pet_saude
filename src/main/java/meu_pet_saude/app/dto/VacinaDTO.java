@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class VacinaDTO {
 
-    private String nome;
+    private String nomeAnimal;
     private String vacina;
     private LocalDate dataAplicacao;
     private String veterinario;

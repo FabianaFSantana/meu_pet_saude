@@ -50,6 +50,7 @@ public class Vermifugacao {
     public VermifugacaoDTO converterVermifugacaoDTO() {
         VermifugacaoDTO dto = new VermifugacaoDTO();
 
+        dto.setNomeAnimal(animal.getNome());
         dto.setVermifugo(nomeMedic);
         dto.setDataUltimaDose(proximaDose);
         dto.setDosagem(dosagem);
