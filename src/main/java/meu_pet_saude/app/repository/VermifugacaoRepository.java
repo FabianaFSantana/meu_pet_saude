@@ -14,4 +14,5 @@ import java.time.LocalDate;
 public interface VermifugacaoRepository extends JpaRepository<Vermifugacao, Long> {
     
     List<Vermifugacao> findByData(LocalDate data);
+    List<Vermifugacao> findByProximaDose(LocalDate proximaDose);
 }

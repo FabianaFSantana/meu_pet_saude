@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import meu_pet_saude.app.dto.CarrapaticidaDTO;
 import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.CarrapaticidaService;
@@ -22,12 +24,12 @@ import meu_pet_saude.app.service.CarrapaticidaService;
 public class CarrapaticidaController {
 
     @PostMapping("/{animal_id}")
-    public ResponseEntity<Carrapaticida> cadastrarDosagem(@PathVariable("animal_id") Long idAnimal, @RequestBody Carrapaticida carrapatoPulga) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(animalService.adicionarCarrapaticidaListaAnimal(idAnimal, carrapatoPulga));
+    public ResponseEntity<CarrapaticidaDTO> cadastrarDosagem(@PathVariable("animal_id") Long idAnimal, @RequestBody Carrapaticida carrapaticida) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(animalService.adicionarCarrapaticidaListaAnimal(idAnimal, carrapaticida));
     }
 
     @GetMapping("/{carrap_id}")
-    public ResponseEntity<Carrapaticida> exibirCarrapaticidaPeloId(@PathVariable("carrap_id") Long idCarrap) {
+    public ResponseEntity<CarrapaticidaDTO> exibirCarrapaticidaPeloId(@PathVariable("carrap_id") Long idCarrap) {
         return ResponseEntity.status(HttpStatus.OK).body(carrapaticidaService.buscarCarrapaticidaPeloId(idCarrap));
     }
 

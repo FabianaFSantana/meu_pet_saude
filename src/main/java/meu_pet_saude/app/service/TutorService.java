@@ -21,7 +21,7 @@ import meu_pet_saude.app.repository.TutorRepository;
 @Service
 public class TutorService {
     
-    public Tutor salvarTutor(Tutor tutor) {
+    public TutorDTO salvarTutor(Tutor tutor) {
         String senha = tutor.getSenha();
 
         BCryptPasswordEncoder encoder = autentificacaoService.getPasswordEncoder();
@@ -38,20 +38,20 @@ public class TutorService {
         endereco.setCidade(enderecoDTO.getLocalidade());
         endereco.setUf(enderecoDTO.getUf());
 
-        return tutorRepository.save(tutor);
+        return tutorRepository.save(tutor).converterTutorDTO();
     }
 
-    public Tutor buscaTutorPeloEmail(String email) {
+    public TutorDTO buscaTutorPeloEmail(String email) {
         Optional<Tutor> tutorOptional = tutorRepository.findByEmail(email);
 
         if (tutorOptional.isPresent()) {
             Tutor tutor = tutorOptional.get();
-            return tutor;
+            return tutor.converterTutorDTO();
         }
         return null;
     }
 
-    public Animal adicionarAnimalNaListaDeTutor(Long id, Animal animal) {
+    public AnimalDTO adicionarAnimalNaListaDeTutor(Long id, Animal animal) {
         Optional<Tutor> tutorOptional = tutorRepository.findById(id);
 
         if (tutorOptional.isPresent()) {
@@ -61,7 +61,7 @@ public class TutorService {
             animalRepository.save(animal);
             tutorRepository.save(tutor);
 
-            return animal;   
+            return animal.converterAnimalDTO();   
         }
         return null;
     }
@@ -89,7 +89,7 @@ public class TutorService {
         return null;
     }
 
-    public Tutor atualizarDadosTutor(Long id, Tutor tutor) {
+    public TutorDTO atualizarDadosTutor(Long id, Tutor tutor) {
         Optional<Tutor> tutorOptional = tutorRepository.findById(id);
 
         if (tutorOptional.isPresent()) {
@@ -111,7 +111,7 @@ public class TutorService {
             endereco.setNumero(tutor.getEndereco().getNumero());
             endereco.setComplemento(tutor.getEndereco().getComplemento());
            
-            return tutorRepository.save(tutorEncontrado);
+            return tutorRepository.save(tutorEncontrado).converterTutorDTO();
         }
         return null;
     }

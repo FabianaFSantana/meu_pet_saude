@@ -57,11 +57,6 @@ public class RacaoController {
         return ResponseEntity.status(HttpStatus.OK).body(racaoService.buscarRacoesPelaDataDeCompra(dataInicial, dataFinal));
     }
 
-    @GetMapping("/animal/{animal_id}")
-    public ResponseEntity<List<RacaoDTO>> exibirListaDeRacoesDoAnimal(@PathVariable("animal_id") Long idAnimal) {
-        return ResponseEntity.status(HttpStatus.OK).body(racaoService.buscarRacoesPorAnimal(idAnimal));
-    }
-
     @PutMapping("/{racao_id}")
     public ResponseEntity<Racao> atualizarDadosDaRacao(@PathVariable("racao_id") Long id, @RequestBody Racao racao) {
         return ResponseEntity.status(HttpStatus.OK).body(racaoService.atualizarRacao(id, racao));

@@ -1,13 +1,16 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import meu_pet_saude.app.dto.VermifugacaoDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Vermifugacao;
 import meu_pet_saude.app.repository.AnimalRepository;
@@ -16,26 +19,43 @@ import meu_pet_saude.app.repository.VermifugacaoRepository;
 @Service
 public class VermifugacaoService {
 
+    public LocalDate calcularProximaDoseVermifugacao(Long idVerm) {
+        Optional<Vermifugacao> vermifugacaoOptional = vermifugacaoRepository.findById(idVerm);
 
-    public List<Vermifugacao> exibirListaDeVermifugosDoAnimal(Long idAnimal) {
+        if (vermifugacaoOptional.isPresent()) {
+            Vermifugacao vermifugo = vermifugacaoOptional.get();
+
+            LocalDate dataDose = vermifugo.getData();
+            LocalDate proximaDose = dataDose.plusDays(180);
+
+            vermifugo.setProximaDose(proximaDose);
+            vermifugacaoRepository.save(vermifugo);
+
+            return proximaDose;
+        }
+        return null;
+    }
+
+    public List<VermifugacaoDTO> exibirListaDeVermifugosDoAnimal(Long idAnimal) {
         
         Optional<Animal> animOptional = animalRepository.findById(idAnimal);
         if (animOptional.isPresent()) {
             Animal animalEncont = animOptional.get();
 
-            List<Vermifugacao> vermifugos =  animalEncont.getVermifugos();
+            List<VermifugacaoDTO> vermifugos =  animalEncont.getVermifugos().stream().map(vermifugo -> new VermifugacaoDTO(vermifugo.getAnimal().getNome(), 
+            vermifugo.getNomeMedic(), vermifugo.getData(), vermifugo.getDosagem(), vermifugo.getProximaDose())).collect(Collectors.toList());
             return vermifugos;
         } else {
             return Collections.emptyList();
         }
     }
 
-    public Vermifugacao buscarVermifugacaoPorId(Long idVerm) {
+    public VermifugacaoDTO buscarVermifugacaoPorId(Long idVerm) {
         Optional<Vermifugacao> vermOptional = vermifugacaoRepository.findById(idVerm);
 
         if (vermOptional.isPresent()) {
             Vermifugacao vermifugo = vermOptional.get();
-            return vermifugo;
+            return vermifugo.converterVermifugacaoDTO();
         }
         return null;
     }
@@ -50,6 +70,7 @@ public class VermifugacaoService {
             vermEncontrada.setPeso(vermifugacao.getPeso());
             vermEncontrada.setDosagem(vermifugacao.getDosagem());
             vermEncontrada.setData(vermifugacao.getData());
+            vermEncontrada.setProximaDose(vermifugacao.getProximaDose());
 
             return vermifugacaoRepository.save(vermEncontrada);
         }

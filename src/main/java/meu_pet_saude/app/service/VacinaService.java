@@ -1,13 +1,16 @@
 package meu_pet_saude.app.service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import meu_pet_saude.app.dto.VacinaDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Vacina;
 import meu_pet_saude.app.repository.AnimalRepository;
@@ -17,13 +20,30 @@ import meu_pet_saude.app.repository.VacinaRepository;
 public class VacinaService {
 
    
-    public Vacina buscarVacinaPorId(Long id) {
+    public VacinaDTO buscarVacinaPorId(Long id) {
         Optional<Vacina> vacinaOptional = vacinaRepository.findById(id);
 
         if (vacinaOptional.isPresent()) {
             Vacina vacina = vacinaOptional.get();
 
-            return vacina;
+            return vacina.converterVacinaDTO();
+        }
+        return null;
+    }
+
+    public LocalDate calcularProximaDoseVacina(Long idVacina) {
+        Optional<Vacina> vacinaOptional = vacinaRepository.findById(idVacina);
+
+        if (vacinaOptional.isPresent()) {
+            Vacina vacina = vacinaOptional.get();
+
+            LocalDate dataDose = vacina.getData();
+            LocalDate proximaVacina = dataDose.plusDays(365);
+
+            vacina.setProximaDose(proximaVacina);
+            vacinaRepository.save(vacina);
+
+            return proximaVacina;
         }
         return null;
     }
@@ -38,6 +58,7 @@ public class VacinaService {
             vacEncontrada.setData(vacina.getData());
             vacEncontrada.setNomeDaClinica(vacina.getNomeDaClinica());
             vacEncontrada.setNomeVeterinario(vacina.getNomeVeterinario());
+            vacEncontrada.setProximaDose(vacina.getProximaDose());
 
             return vacinaRepository.save(vacEncontrada);
         }
@@ -67,14 +88,14 @@ public class VacinaService {
     }
             
     @Transactional
-    public List<Vacina> exibirListaDeVacinas(Long idAnimal) {
+    public List<VacinaDTO> exibirListaDeVacinas(Long idAnimal) {
       
         Animal animal = animalRepository.findById(idAnimal).orElse(null);
 
         if (animal == null) {
             return Collections.emptyList();
         }
-        List<Vacina> vacinas = animal.getVacinas();
+        List<VacinaDTO> vacinas = animal.getVacinas().stream().map(vacina -> new VacinaDTO(vacina.getAnimal().getNome(), vacina.getNomeVacina(), vacina.getData(), vacina.getNomeVeterinario(), vacina.getProximaDose())).collect(Collectors.toList());
         return vacinas;
     }
    

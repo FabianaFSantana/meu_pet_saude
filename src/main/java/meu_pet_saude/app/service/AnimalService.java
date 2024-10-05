@@ -4,11 +4,18 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import meu_pet_saude.app.dto.AnimalDTO;
+import meu_pet_saude.app.dto.CarrapaticidaDTO;
+import meu_pet_saude.app.dto.ConsultaDTO;
+import meu_pet_saude.app.dto.VacinaDTO;
+import meu_pet_saude.app.dto.VermifugacaoDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Carrapaticida;
 import meu_pet_saude.app.model.Consulta;
@@ -27,16 +34,16 @@ import meu_pet_saude.app.repository.VermifugacaoRepository;
 @Service
 public class AnimalService {
     
-    public List<Animal> exibirListaDeAnimais() {
-        return animalRepository.findAll();
+    public List<AnimalDTO> exibirListaDeAnimais() {
+        return animalRepository.findAll().stream().map(animal -> new AnimalDTO(animal.getNome(), animal.getEspecie(), animal.getRaca(), animal.getGenero())).collect(Collectors.toList());
     }
 
-    public Animal buscarAnimalPeloId(Long id) {
+    public AnimalDTO buscarAnimalPeloId(Long id) {
         Optional<Animal> animOptional = animalRepository.findById(id);
 
         if (animOptional.isPresent()) {
             Animal animal = animOptional.get();
-            return animal;
+            return animal.converterAnimalDTO();
         }
         return null;
     }
@@ -48,7 +55,7 @@ public class AnimalService {
             Animal animal = animalOptional.get();
 
             racaoRepository.save(racao);
-            LocalDate dataProximaCompra = (racaoService.calcularConsumoDaRacao(racao.getId()));
+            LocalDate dataProximaCompra = racaoService.calcularConsumoDaRacao(racao.getId());
             racao.setDataProximaCompra(dataProximaCompra);
             animal.addRacao(racao);
             animalRepository.save(animal);
@@ -58,53 +65,62 @@ public class AnimalService {
         return null;
     }
 
-    public Vacina adicionarVacinaNaListaDoAnimal(Long id, Vacina vacina) {
+    public VacinaDTO adicionarVacinaNaListaDoAnimal(Long id, Vacina vacina) {
         Optional<Animal> animalOptional = animalRepository.findById(id);
 
         if (animalOptional.isPresent()) {
             Animal animal = animalOptional.get();
 
-            animal.addVacina(vacina);
             vacinaRepository.save(vacina);
+            LocalDate proximaDose = vacinaService.calcularProximaDoseVacina(vacina.getIdVacina());
+            vacina.setProximaDose(proximaDose);
+
+            animal.addVacina(vacina);
             animalRepository.save(animal);
             
-            return vacina;
+            return vacina.converterVacinaDTO();
         }
         return null;
     }
 
-    public Vermifugacao adicionarVermifugoListaAnimal(Long idAnimal, Vermifugacao vermifugacao) {
+    public VermifugacaoDTO adicionarVermifugoListaAnimal(Long idAnimal, Vermifugacao vermifugo) {
         Optional<Animal> animOptional = animalRepository.findById(idAnimal);
 
         if (animOptional.isPresent()) {
             Animal animal = animOptional.get();
 
-            animal.addVermifugo(vermifugacao);
-            vermifugacaoRepository.save(vermifugacao);
+            vermifugacaoRepository.save(vermifugo);
+            LocalDate proximaDose = vermifugacaoService.calcularProximaDoseVermifugacao(vermifugo.getIdVerm());
+            vermifugo.setProximaDose(proximaDose);
+
+            animal.addVermifugo(vermifugo);
             animalRepository.save(animal);
 
-            return vermifugacao;
+            return vermifugo.converterVermifugacaoDTO();
         }
         return null;
     }
 
 
-    public Carrapaticida adicionarCarrapaticidaListaAnimal(Long idAnimal, Carrapaticida carrapaticida) {
+    public CarrapaticidaDTO adicionarCarrapaticidaListaAnimal(Long idAnimal, Carrapaticida carrapaticida) {
         Optional<Animal> animalOptional = animalRepository.findById(idAnimal);
 
         if (animalOptional.isPresent()) {
             Animal animal = animalOptional.get();
 
-            animal.addCarrapaticida(carrapaticida);
             carrapaticidaRepository.save(carrapaticida);
+            LocalDate proximaDose = carrapaticidaService.calcularProximaDoseCarrapaticida(carrapaticida.getIdCarrapaticida());
+            carrapaticida.setProximaDose(proximaDose);
+
+            animal.addCarrapaticida(carrapaticida);
             animalRepository.save(animal);
         
-            return carrapaticida;
+            return carrapaticida.converterCarrapaticidaDTO();
         }
         return null;
     }
 
-    public Consulta adicionarConsultaListaAnimal(Long idAnimal, Consulta consulta) {
+    public ConsultaDTO adicionarConsultaListaAnimal(Long idAnimal, Consulta consulta) {
         Optional<Animal> animalOptional = animalRepository.findById(idAnimal);
 
         if (animalOptional.isPresent()) {
@@ -114,17 +130,17 @@ public class AnimalService {
             consultaRepository.save(consulta);
             animalRepository.save(animal);
 
-            return consulta;
+            return consulta.converterConsultaDTO();
         }
         return null;
     }
 
-    public List<Animal> exibirListaDeAnimaisDoTutor(Long idTutor) {
+    public List<AnimalDTO> exibirListaDeAnimaisDoTutor(Long idTutor) {
         Optional<Tutor> tutorOptional = tutorRepository.findById(idTutor);
 
         if (tutorOptional.isPresent()) {
             Tutor tutor = tutorOptional.get();
-            return tutor.getAnimais();
+            return tutor.getAnimais().stream().map(animal -> new AnimalDTO(animal.getNome(), animal.getEspecie(), animal.getRaca(), animal.getGenero())).collect(Collectors.toList());
             
         } else {
             return Collections.emptyList();
@@ -197,4 +213,12 @@ public class AnimalService {
     @Autowired
     private RacaoService racaoService;
 
+    @Autowired 
+    private VacinaService vacinaService;
+    
+    @Autowired
+    private VermifugacaoService vermifugacaoService;
+
+    @Autowired
+    private CarrapaticidaService carrapaticidaService;
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import meu_pet_saude.app.constant.TipoDeConsulta;
+import meu_pet_saude.app.dto.ConsultaDTO;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Consulta;
 import meu_pet_saude.app.repository.AnimalRepository;
@@ -18,41 +19,47 @@ import meu_pet_saude.app.repository.ConsultaRepository;
 @Service
 public class ConsultaService {
 
-    public Consulta buscarConsultaPeloId(Long idConsulta) {
+    public ConsultaDTO buscarConsultaPeloId(Long idConsulta) {
         Optional<Consulta> consultaOptional = consultaRepository.findById(idConsulta);
 
         if (consultaOptional.isPresent()) {
-            return consultaOptional.get();
+            return consultaOptional.get().converterConsultaDTO();
         }
         return null;
     }
    
-    public List<Consulta> exibirConsultas(Long idAnimal) {
+    public List<ConsultaDTO> exibirConsultas(Long idAnimal) {
         Optional<Animal> animOptional = animalRepository.findById(idAnimal);
 
         if (animOptional.isPresent()) {
             Animal animal = animOptional.get();
-            return animal.getConsultas();
+
+            List<ConsultaDTO> consultas = animal.getConsultas().stream().map(consulta -> new ConsultaDTO(consulta.getNomeDaClinica(), consulta.getVeterinario(),consulta.getAnimal().getNome(), consulta.getTipoDeConsulta(), consulta.getDataDaConsulta(),  consulta.getSintomas(), consulta.getDiagnostico(), consulta.getMedicacao(), consulta.getPosologia())).collect(Collectors.toList());
+
+            return consultas;
             
         } else {
             return Collections.emptyList();
         }
     }
 
-    public List<Consulta> buscarConsultasPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
-        List<Consulta> consultas = consultaRepository.findByDataDaConsultaBetween(dataInicial, dataFinal);
+    public List<ConsultaDTO> buscarConsultasPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+
+        List<ConsultaDTO> consultas = consultaRepository.findByDataDaConsultaBetween(dataInicial, dataFinal).stream().map(consulta -> new ConsultaDTO(consulta.getNomeDaClinica(), consulta.getVeterinario(), consulta.getAnimal().getNome(), consulta.getTipoDeConsulta(), consulta.getDataDaConsulta(), consulta.getSintomas(), consulta.getDiagnostico(), consulta.getMedicacao(), consulta.getPosologia())).collect(Collectors.toList());
+
         return consultas;
     }
 
-    public List<Consulta> buscarConsultasPorTipo(Long idAnimal, TipoDeConsulta tipoDeConsulta) {
+    public List<ConsultaDTO> buscarConsultasPorTipo(Long idAnimal, TipoDeConsulta tipoDeConsulta) {
         
         Optional<Animal> animalOptional = animalRepository.findById(idAnimal);
 
         if (animalOptional.isPresent()) {
             Animal animal = animalOptional.get();
-            List<Consulta> consultas = animal.getConsultas();
+            
+            List<ConsultaDTO> consultas = animal.getConsultas().stream().filter(consulta -> consulta.getTipoDeConsulta().equals(tipoDeConsulta)).map(consulta -> new ConsultaDTO(consulta.getNomeDaClinica(), consulta.getVeterinario(), consulta.getAnimal().getNome(), consulta.getTipoDeConsulta(), consulta.getDataDaConsulta(), consulta.getSintomas(), consulta.getDiagnostico(), consulta.getMedicacao(), consulta.getPosologia())).collect(Collectors.toList());
 
-            return consultas.stream().filter(consulta -> consulta.getTipoDeConsulta().equals(tipoDeConsulta)).collect(Collectors.toList());
+            return consultas;
         }
         return Collections.emptyList();
     }

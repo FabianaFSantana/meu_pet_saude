@@ -38,7 +38,7 @@ public class RacaoScheduller {
         email.setSubject("Lembrete de compra de Ração");
         email.setFrom(EMAIL_SENDER);
         email.setTo(tutor.getEmail());
-        email.setText("Hoje é dia de repor a ração de " + racao.getAnimal().getNome() + "! No dia " + racao.getDataUltimaCompra() + "foi a última vez que você comprou a ração " + racao.getNomeRacao() + "de peso " + racao.getPeso() + "kgk, no valor de R$ " + racao.getPreco() + "na loja " + racao.getLoja());
+        email.setText("Hoje é dia de repor a ração de " + racao.getAnimal().getNome() + "! No dia " + racao.getDataUltimaCompra() + " foi a última vez que você comprou a ração " + racao.getNomeRacao() + "de peso " + racao.getPeso() + " kg, no valor de R$ " + racao.getPreco() + " na loja " + racao.getLoja());
 
         javaMailSender.send(email);
     }

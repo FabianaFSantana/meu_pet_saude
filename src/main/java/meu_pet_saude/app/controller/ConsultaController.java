@@ -2,7 +2,6 @@ package meu_pet_saude.app.controller;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.constant.TipoDeConsulta;
+import meu_pet_saude.app.dto.ConsultaDTO;
 import meu_pet_saude.app.model.Consulta;
 import meu_pet_saude.app.service.AnimalService;
 import meu_pet_saude.app.service.ConsultaService;
@@ -27,22 +27,22 @@ import meu_pet_saude.app.service.ConsultaService;
 public class ConsultaController {
 
     @PostMapping("/{animal_id}")
-    public ResponseEntity<Consulta> criarRegistroDeConsulta(@PathVariable("animal_id") Long idAnimal, @RequestBody Consulta consulta) {
+    public ResponseEntity<ConsultaDTO> criarRegistroDeConsulta(@PathVariable("animal_id") Long idAnimal, @RequestBody Consulta consulta) {
         return ResponseEntity.status(HttpStatus.CREATED).body(animalService.adicionarConsultaListaAnimal(idAnimal, consulta));
     }
 
     @GetMapping("/{consulta_id}")
-    public ResponseEntity<Consulta> buscarConsultaPeloId(@PathVariable("consulta_id") Long idConsulta) {
+    public ResponseEntity<ConsultaDTO> buscarConsultaPeloId(@PathVariable("consulta_id") Long idConsulta) {
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.buscarConsultaPeloId(idConsulta));
     }
 
     @GetMapping("/periodo")
-    public ResponseEntity<List<Consulta>> exibirConsultasPorPeriodo(@RequestParam("dataInicial") LocalDate dataInicial, @RequestParam("dataFinal") LocalDate dataFinal) {
+    public ResponseEntity<List<ConsultaDTO>> exibirConsultasPorPeriodo(@RequestParam("dataInicial") LocalDate dataInicial, @RequestParam("dataFinal") LocalDate dataFinal) {
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.buscarConsultasPorPeriodo(dataInicial, dataFinal));
     }
 
     @GetMapping("/tipo/{animal_id}")
-    public ResponseEntity<List<Consulta>> exibirConsultasPeloTipo(@PathVariable("animal_id") Long idAnimal, @RequestParam("tipoDeConsulta") TipoDeConsulta tipoDeConsulta) {
+    public ResponseEntity<List<ConsultaDTO>> exibirConsultasPeloTipo(@PathVariable("animal_id") Long idAnimal, @RequestParam("tipoDeConsulta") TipoDeConsulta tipoDeConsulta) {
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.buscarConsultasPorTipo(idAnimal, tipoDeConsulta));
     }
 

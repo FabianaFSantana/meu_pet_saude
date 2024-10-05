@@ -14,5 +14,6 @@ public interface VacinaRepository extends JpaRepository<Vacina, Long> {
     
     
     List<Vacina> findByData(LocalDate data);
+    List<Vacina> findByProximaDose(LocalDate proximaDose);
 
 }
