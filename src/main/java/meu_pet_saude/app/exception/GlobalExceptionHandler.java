@@ -25,4 +25,9 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros);
     }
+
+    @ExceptionHandler(AutenticacaoException.class)
+    public ResponseEntity<String> handleTutorNaoEncontrado(AutenticacaoException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }

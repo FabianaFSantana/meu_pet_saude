@@ -12,6 +12,7 @@ import meu_pet_saude.app.dto.AnimalDTO;
 import meu_pet_saude.app.dto.EnderecoDTO;
 import meu_pet_saude.app.dto.TutorAnimaisDTO;
 import meu_pet_saude.app.dto.TutorDTO;
+import meu_pet_saude.app.exception.AutenticacaoException;
 import meu_pet_saude.app.model.Animal;
 import meu_pet_saude.app.model.Endereco;
 import meu_pet_saude.app.model.Tutor;
@@ -48,7 +49,7 @@ public class TutorService {
             Tutor tutor = tutorOptional.get();
             return tutor.converterTutorDTO();
         }
-        return null;
+        throw new AutenticacaoException("E-mail não existe!");
     }
 
     public AnimalDTO adicionarAnimalNaListaDeTutor(Long id, Animal animal) {
