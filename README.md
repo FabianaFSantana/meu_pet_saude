@@ -65,6 +65,7 @@ O servidor estará acessível em `http://localhost:8080` por padrão.
 O projeto é estruturado da seguinte forma:
 * `com.meu_pet_saude.api.constant`: Constant para definir o gênero e a espécie do animal e o tipo de consulta (rotina ou emergência).
 * `com.meu_pet_saude.api.controller`: Controladores para manipular as requisições HTTP.
+* `com.meu_pet_saude.api.dto`:  DTO's para otimizar a comunicação entre cliente e servidor, evitando o envio de dados desnecessários e melhorando a segurança e a performance da aplicação.
 * `com.meu_pet_saude.api.model`: Modelos de dados para representar Tutor, ViaCepEndereco, Animal, Vacina, CarrapatoPulga (carrapaticidas), Vermifugacao e Consulta.
 * `com.meu_pet_saude.api.repository`: Repositórios para interação com o banco de dados.
 * `com.meu_pet_saude.api.service`: Servicos de ViaCepEnderco (para acessar a API externa ViaCep), Animal, Vacina, CarrapatoPulga, Vermifugacao e Consulta para criar os métodos para relacionar Tutor a Animal, Enderço via cep a Tutor e vacinas, carrapaticidas, vermífugos e consultas a Animal.
