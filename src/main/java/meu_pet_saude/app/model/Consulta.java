@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import meu_pet_saude.app.constant.TipoDeConsulta;
+import meu_pet_saude.app.dto.ConsultaDTO;
 
 @Data
 @NoArgsConstructor
@@ -46,6 +47,7 @@ public class Consulta {
     @Column(columnDefinition = "TEXT")
     private String diagnostico;
 
+    @Column(columnDefinition = "TEXT")
     private String medicacao;
 
     @Column(columnDefinition = "TEXT")
@@ -54,4 +56,20 @@ public class Consulta {
     @ManyToOne
     @JoinColumn(name = "animal_id")
     private Animal animal;
+    
+    public ConsultaDTO converterConsultaDTO() {
+        ConsultaDTO dto = new ConsultaDTO();
+
+        dto.setDataDaConsulta(dataDaConsulta);
+        dto.setDiagnostico(diagnostico);
+        dto.setMedicamentos(medicacao);
+        dto.setNomeAnimal(animal.getNome());
+        dto.setNomeClinica(nomeDaClinica);
+        dto.setNomeVeterinario(veterinario);
+        dto.setPosologia(posologia);
+        dto.setSintomas(sintomas);
+        dto.setTipoDeConsulta(tipoDeConsulta);
+
+        return dto;
+    }
 }

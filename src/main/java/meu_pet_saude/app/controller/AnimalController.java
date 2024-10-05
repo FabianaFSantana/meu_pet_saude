@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import meu_pet_saude.app.dto.AnimalDTO;
 import meu_pet_saude.app.dto.CarrapaticidaDTO;
+import meu_pet_saude.app.dto.ConsultaDTO;
 import meu_pet_saude.app.dto.RacaoDTO;
 import meu_pet_saude.app.dto.VacinaDTO;
 import meu_pet_saude.app.dto.VermifugacaoDTO;
@@ -71,7 +72,7 @@ public class AnimalController {
     }
 
     @GetMapping("/exibirListaDeConsultas/{idAnimal}")
-    public ResponseEntity<List<Consulta>> exibirListaConsultas(@PathVariable("idAnimal") Long idAnimal){
+    public ResponseEntity<List<ConsultaDTO>> exibirListaConsultas(@PathVariable("idAnimal") Long idAnimal){
         return ResponseEntity.status(HttpStatus.OK).body(consultaService.exibirConsultas(idAnimal));
     }
 

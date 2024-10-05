@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import meu_pet_saude.app.dto.AnimalDTO;
 import meu_pet_saude.app.dto.CarrapaticidaDTO;
+import meu_pet_saude.app.dto.ConsultaDTO;
 import meu_pet_saude.app.dto.VacinaDTO;
 import meu_pet_saude.app.dto.VermifugacaoDTO;
 import meu_pet_saude.app.model.Animal;
@@ -119,7 +120,7 @@ public class AnimalService {
         return null;
     }
 
-    public Consulta adicionarConsultaListaAnimal(Long idAnimal, Consulta consulta) {
+    public ConsultaDTO adicionarConsultaListaAnimal(Long idAnimal, Consulta consulta) {
         Optional<Animal> animalOptional = animalRepository.findById(idAnimal);
 
         if (animalOptional.isPresent()) {
@@ -129,7 +130,7 @@ public class AnimalService {
             consultaRepository.save(consulta);
             animalRepository.save(animal);
 
-            return consulta;
+            return consulta.converterConsultaDTO();
         }
         return null;
     }
