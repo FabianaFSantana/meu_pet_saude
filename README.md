@@ -8,7 +8,7 @@ API REST para desenvolvimento de um app de caderneta de saúde Pet.
 </div>
 
 ## Descrição do Projeto
-O Meu Pet Saúde é uma API REST desenvolvida com Spring Boot para servir como backend de uma aplicação controle veterinário para cães e gatos de estimação. Ele oferece recursos para manipulação de tutores, pets, controle de vacinas, vermifugação, atiparasitários e consultas verterinárias, assim como envio por email de mensagem de aniversário para os tutores e de notificações de lembretes das doses de reforço através de um agendamento de tarefas, proporcionando uma interface para interação com o banco de dados MySQL. Fonerce segurança através da autenticação do usuário e seu cadastro por meio de login utilizando o Spring Security, assim como a autenticação de token através do JWT, para possibilitar a segurança do usuário.
+O Meu Pet Saúde é uma API REST desenvolvida com Spring Boot para servir como backend de uma aplicação controle veterinário para cães e gatos de estimação. Ele oferece recursos para manipulação de tutores, pets, controle de vacinas, vermifugação, antiparasitários e consultas verterinárias, assim como envio por email de mensagem de aniversário para os tutores e de notificações de lembretes das doses de reforço através de um agendamento de tarefas, proporcionando uma interface para interação com o banco de dados MySQL. Fonerce segurança através da autenticação do usuário e seu cadastro por meio de login utilizando o Spring Security, assim como a autenticação de token através do JWT, para possibilitar a segurança do usuário.
 
 ## Configuração do Ambiente
 
