@@ -23,7 +23,7 @@ import meu_pet_saude.app.service.TokenService;
 public class AutenticacaoController {
     
     @PostMapping("/login")
-    public ResponseEntity<TutorDTO> login(@Valid @RequestBody AutenticacaoDTO dto) {
+    public ResponseEntity<TutorDTO> login(@RequestBody @Valid AutenticacaoDTO dto) {
 
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
 
